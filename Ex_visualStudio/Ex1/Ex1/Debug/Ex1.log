@@ -1,0 +1,13 @@
+﻿  test_program.cpp
+c:\users\ralle\documents\github\script\ex_visualstudio\ex1\ex1\test_program.cpp(17): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\ralle\documents\github\script\ex_visualstudio\ex1\ex1\test_program.cpp(18): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\ralle\documents\github\script\ex_visualstudio\ex1\ex1\test_program.cpp(19): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\ralle\documents\github\script\ex_visualstudio\ex1\ex1\test_program.cpp(20): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\ralle\documents\github\script\ex_visualstudio\ex1\ex1\test_program.cpp(21): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\ralle\documents\github\script\ex_visualstudio\ex1\ex1\test_program.cpp(22): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\ralle\documents\github\script\ex_visualstudio\ex1\ex1\test_program.cpp(23): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\ralle\documents\github\script\ex_visualstudio\ex1\ex1\test_program.cpp(24): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\ralle\documents\github\script\ex_visualstudio\ex1\ex1\test_program.cpp(25): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\ralle\documents\github\script\ex_visualstudio\ex1\ex1\test_program.cpp(26): warning C4305: 'initializing': truncation from 'double' to 'float'
+  Ex1.vcxproj -> C:\Users\Ralle\Documents\GitHub\script\Ex_visualStudio\Ex1\Debug\Ex1.exe
+  Ex1.vcxproj -> C:\Users\Ralle\Documents\GitHub\script\Ex_visualStudio\Ex1\Debug\Ex1.pdb (Partial PDB)
