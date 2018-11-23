@@ -2,7 +2,16 @@ clear all;
 close all;
 clc;
 
+
 original = imread('Håndmålte billeder\b1.jpg');
+
+a = imread('Filtter billeder\Laser_off_Light_on_650mn_on_nd_0.4_set1_thor.jpg');
+b = imread('Filtter billeder\Laser_off_Light_on_650mn_on_nd_off_set1_thor.jpg');
+c = imread('Filtter billeder\Laser_on_Light_off_650mn_on_nd_0.4set1_thor.jpg');
+d = imread('Filtter billeder\Laser_on_Light_on_650mn_on_nd_0.4set1_thor.jpg');
+e = imread('Filtter billeder\Laser_on_Light_on_650mn_on_nd_off_set1_thor.jpg');
+original=d;
+
 figure()
 imshow(original);
 red = original(:,:,1);
@@ -15,6 +24,7 @@ imshow(red);
 
 [location_of_dot_x, location_of_dot_y] = locationDot(original) ;
 
+
 Wsub = 30;
 Hsub = 20;
 
@@ -25,7 +35,8 @@ Hsub = 20;
 
 figure()
 imshow(submatrix_red);
-[midOfMass_H,midOfMass_W] = midOfMass(submatrix_red,Wsub,Hsub,offsetW_r,offsetH_r)
+
+% [midOfMass_H,midOfMass_W] = midOfMass(submatrix_red,Wsub,Hsub,offsetW_r,offsetH_r)
 
 submatrixRGB = cat(3, submatrix_red, submatrix_green, submatrix_blue);
 figure()
