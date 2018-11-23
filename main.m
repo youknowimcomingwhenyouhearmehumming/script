@@ -18,19 +18,28 @@ imshow(red);
 Wsub = 30;
 Hsub = 20;
 
-[submatrix_red,offsetH,offsetW] = subMatrix(red,location_of_dot_y,location_of_dot_x,Wsub,Hsub)
-[submatrix_green,offsetH,offsetW] = subMatrix(green,location_of_dot_y,location_of_dot_x,Wsub,Hsub)
-[submatrix_blue,offsetH,offsetW] = subMatrix(blue,location_of_dot_y,location_of_dot_x,Wsub,Hsub)
+[submatrix_red,offsetH_r,offsetW_r] = subMatrix(red,location_of_dot_y,location_of_dot_x,Wsub,Hsub)
+[submatrix_green,offsetH_g,offsetW_g] = subMatrix(green,location_of_dot_y,location_of_dot_x,Wsub,Hsub)
+[submatrix_blue,offsetH_b,offsetW_b] = subMatrix(blue,location_of_dot_y,location_of_dot_x,Wsub,Hsub)
 
 
 figure()
 imshow(submatrix_red);
+[midOfMass_H,midOfMass_W] = midOfMass(submatrix_red,Wsub,Hsub,offsetW_r,offsetH_r)
 
 submatrixRGB = cat(3, submatrix_red, submatrix_green, submatrix_blue);
 figure()
 imshow(submatrixRGB);
 
-[midOfMass_H,midOfMass_W] = midOfMass(submatrix_red,Wsub,Hsub,offsetW,offsetH)
+% figure()
+% imshow(submatrix_green);
+% [midOfMass_H,midOfMass_W] = midOfMass(submatrix_green,Wsub,Hsub,offsetW_g,offsetH_g)
+% 
+% figure()
+% imshow(submatrix_blue);
+% [midOfMass_H,midOfMass_W] = midOfMass(submatrix_blue,Wsub,Hsub,offsetW_b,offsetH_b)
+
+
 
 
 

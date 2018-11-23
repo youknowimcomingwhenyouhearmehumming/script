@@ -19,7 +19,7 @@ imshow(hsv);
 hsv_hue=hsv(:,:,1);
 
 
-mask=[(hsv(:,:,1)>=0.88)& (hsv(:,:,1)<=0.94) & (hsv(:,:,3)>=0.9)] ;
+mask=[(hsv(:,:,1)>=0.87)& (hsv(:,:,1)<=0.97) & (hsv(:,:,3)>=0.8)] ;
 
 [location_of_dot_x,location_of_dot_y] = find(mask == 1,1,'first') %finding the first element that is equal to 
 % "1" in the first 
