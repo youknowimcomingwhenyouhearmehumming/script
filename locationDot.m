@@ -16,12 +16,13 @@ hsv = rgb2hsv(image);
 figure()
 imshow(hsv);
 
-hsv_hue=hsv(:,:,1);
+mask=[(hsv(:,:,1)>=0.91| hsv(:,:,1)==0)& (hsv(:,:,3)>=0.05) ] ;
+
+% The next line is used for RGB
+% mask=[image(:,:,1)>=10]; 
 
 
-mask=[(hsv(:,:,1)>=0.87)& (hsv(:,:,1)<=0.97) & (hsv(:,:,3)>=0.8)] ;
-
-[location_of_dot_x,location_of_dot_y] = find(mask == 1,1,'first') %finding the first element that is equal to 
+[location_of_dot_x,location_of_dot_y] = find(mask == 1,1,'first') ;%finding the first element that is equal to 
 % "1" in the first 
 
 %These lines is the manual version of "[location_of_dot_x,location_of_dot_y] = find(mask == 1,1,'first')"
