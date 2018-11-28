@@ -22,18 +22,17 @@ end
 x_cm = f*(a1*z_l+f*r0(1))./(a3*z_l+f*r0(3));
 y_cm = f*(a2*z_l+f*r0(2))./(a3*z_l+f*r0(3));
 
-x_cm = round(x_cm./pix_W);
-y_cm = round(y_cm./pix_H);
+x_cm = round(x_cm./pix_W)+0.5*imgW;
+y_cm = round(y_cm./pix_H)+0.5*imgH;
 
 %Find max
 maxVal = 0;
-for i = 1:imgW*searchLineWidtPixels
-    for j = -searchLineWidtPixels:searchLineWidtPixels
-        x = mod(i,imgW);
-        if imageData(y_cm(x)+j,x_cm(x)) > maxVal
-            maxVal = imageData(y_cm(x)+j,x_cm(x));
-            posX = x_cm(x);
-            posY = y_cm(x)+j;
+for i = 1:imgW
+    for j = 1:searchLineWidtPixels*2;
+        if imageData(y_cm(i)+j-searchLineWidtPixels,x_cm(i)) > maxVal
+            maxVal = imageData(y_cm(i)+j-searchLineWidtPixels,x_cm(i));
+            posX = x_cm(i);
+            posY = y_cm(i)+j-searchLineWidtPixels;
         end
     end
 end
