@@ -44,9 +44,8 @@ baseLineLength = 250;
 
 [R,r0] = extrinsicCalibration(images,angles,x0,f,baseLineLength,pix_W,pix_H);
 
-%how to apply R and r0:
-%laser_point_x = -tan((90-Theta)*pi/180)*f;
-%laser_points_y = -tan((Phi)*pi/180)*f;
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %Setup
@@ -65,9 +64,10 @@ Phi = 0;
 %%%%%%%%%Cut out point 
 
 %%%%%%%%%Calculate point mid in image - Remember to undistort the cutouts.
-%%%%%%%%%Also calc offset with R and r0.
-
-%%%%%%%%%Calculate exact point location
+xr =
+yr = 
+%%%%%%%%%Calculate exact point location - Again remember units eg. mm
+[X,Y,Z] = calcWorldPosition(Theta,Phi,xr,yr,f,R,r0);
 
 
 
