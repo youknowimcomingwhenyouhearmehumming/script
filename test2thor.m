@@ -22,7 +22,9 @@ figure(2)
 imshow(red);
 
 
-[location_of_dot_x, location_of_dot_y] = locationDot(original);
+[location_of_dot_x, location_of_dot_y] = locationDot_R_channel(red)
+
+
 
 %since lication doesnøt find the middel but the upper coerne the next two
 %lines is a simpel adjustedment for that
@@ -43,29 +45,29 @@ figure()
 imshow(submatrix_red);
 
 
-hsv = rgb2hsv(original);
-[submatrix_hsv,offsetH_b,offsetW_b] = subMatrix(hsv(:,:,3),location_of_dot_y,location_of_dot_x,Wsub,Hsub)
+% hsv = rgb2hsv(original);
+% [submatrix_hsv,offsetH_b,offsetW_b] = subMatrix(hsv(:,:,3),location_of_dot_y,location_of_dot_x,Wsub,Hsub)
+% 
+% 
+% mask=[submatrix_hsv>=0.05 ] ;
+% hsv_cut=mask.*submatrix_hsv;
+% 
+% figure()
+% imshow(hsv_cut);
+% 
+% 
+% 
+% [midOfMass_H,midOfMass_W] = midOfMass(hsv_cut,Wsub,Hsub,offsetW_r,offsetH_r)
 
 
-mask=[submatrix_hsv>=0.05 ] ;
-hsv_cut=mask.*submatrix_hsv;
 
-figure()
-imshow(hsv_cut);
-
-
-
-[midOfMass_H,midOfMass_W] = midOfMass(hsv_cut,Wsub,Hsub,offsetW_r,offsetH_r)
-
-
-
-[submatrix_hsv_final,offsetH_b,offsetW_b] = subMatrix(hsv(:,:,3),midOfMass_W,midOfMass_H,Wsub,Hsub)
-
-mask=[submatrix_hsv_final>=0.04 ] ;
-submatrix_hsv_final_cut=mask.*submatrix_hsv_final;
-
-figure()
-imshow(submatrix_hsv_final_cut);
+% [submatrix_hsv_final,offsetH_b,offsetW_b] = subMatrix(hsv(:,:,3),midOfMass_W,midOfMass_H,Wsub,Hsub)
+% 
+% mask=[submatrix_hsv_final>=0.04 ] ;
+% submatrix_hsv_final_cut=mask.*submatrix_hsv_final;
+% 
+% figure()
+% imshow(submatrix_hsv_final_cut);
 
 % submatrixRGB = cat(3, submatrix_red, submatrix_green, submatrix_blue);
 % figure()
@@ -111,7 +113,6 @@ sf.sigmay
 % sf.sigmax etc will get you the other parameters.
 
 background=a;
-
 [submatrix_background_red,offsetH_b,offsetW_b] = subMatrix(background(:,:,1),location_of_dot_y,location_of_dot_x,Wsub,Hsub)
 
 figure()

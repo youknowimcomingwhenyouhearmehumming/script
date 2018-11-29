@@ -39,3 +39,8 @@ end
 
 end
 
+if maxVal<20
+            posX = 0;
+            posY = 0;
+end
+

@@ -1,4 +1,4 @@
-function [location_of_dot_x, location_of_dot_y] = locationDot(image)
+function [location_of_dot_x, location_of_dot_y] = locationDot_hsv(image)
 %SUBMATRIX Summary of this function goes here. Author=Thor. The meaning of
 %this function is that is finds the laser dot and estimate an x,y
 %coordinate from one the pixels that belongs to the laser dot. 
@@ -13,21 +13,19 @@ function [location_of_dot_x, location_of_dot_y] = locationDot(image)
 % take the x and y coordinate of this element. 
 
 % The next line is used for HSV
-% hsv = rgb2hsv(image);
-% figure()
-% imshow(hsv);
-% 
-% mask=[(hsv(:,:,1)>=0.91| hsv(:,:,1)==0)& (hsv(:,:,3)>=0.05) ] ;
-% dot=mask.*hsv;
-% figure()
-% imshow(dot);
+hsv = rgb2hsv(image);
+figure()
+imshow(hsv);
 
-% The next line is used for RGB
-mask=[image(:,:,1)>=10]; 
+mask=[(hsv(:,:,1)>=0.91| hsv(:,:,1)==0)& (hsv(:,:,3)>=0.05) ] ;
+dot=mask.*hsv;
+figure()
+imshow(dot);
 
-
-[location_of_dot_x,location_of_dot_y] = find(mask == 1,1,'first') ;%finding the first element that is equal to 
-% "1" in the first 
+% % The next line is used for RGB
+% mask=[image(:,:,1)>=10]; 
+% [location_of_dot_x,location_of_dot_y] = find(mask == 1,1,'first') ;%finding the first element that is equal to 
+% % "1" in the first 
 
 %These lines is the manual version of "[location_of_dot_x,location_of_dot_y] = find(mask == 1,1,'first')"
 % i=1;

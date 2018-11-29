@@ -1,4 +1,13 @@
-clear;
+clear all;
+clc
+close all;
+
+%%% TO DO
+%- Rasmus tage all calibrering ud i selvstændige funktioner
+% -Rasmus i epipolar lines kan man så ikke bestemem width og height inde i
+% funktionen så man ikke ebhøver at fodre den med det, når man kalder
+% funktionen?
+
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%1 - Calibration of camera and laser
 
@@ -46,34 +55,63 @@ baseLineLength = 250;
 
 
 
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-%Setup
-%pick a camera
-%webcamlist
-%cam = webcam('C922')
 
-%%%%%%%%%Take an image
-pic = snapshot(cam);
-%%%%%%%%%Get angles of laser
-Theta = 0;
-Phi = 0;
-%%%%%%%%%Search Along epipolar lines
-[posX,posY] = searchEpiLine(imageData,imgW,imgH,Theta,Phi,R,r0,f,searchLineWidtPixels,pix_W,pix_H);
 
-%%%%%%%%%Cut out point 
-
-%%%%%%%%%Calculate point mid in image - Remember to undistort the cutouts.
-xr =
-yr = 
-%%%%%%%%%Calculate exact point location - Again remember units eg. mm
-[X,Y,Z] = calcWorldPosition(Theta,Phi,xr,yr,f,R,r0);
+%%%---------------------Code the restart movement so back to original theta----------------------
 
 
 
+%%%---------------------Loop that countinues---------------------
+x=[] %X and y coordinates of the laser. One entry pr. loop
+y=[]
+
+counter_loop=1;
+while true
+        if counter_loop=counter_loop>10
+            break
+        end
 
 
+    %%%---------------------Take an image%pick a camera----------------------
+    %webcamlist
+    %cam = webcam('C922')
+    pic = snapshot(cam);
+    red=pic(:,:,1);%takes just the red channel of image
 
+    %%%---------------------Get angles of laser----------------------
+    Theta = 0;
+    Phi = 0;
+
+    %%%---------------------Search Along epipolar lines----------------------
+    [posX,posY] = searchEpiLine(red,imgW,imgH,Theta,Phi,R,r0,f,searchLineWidtPixels,pix_W,pix_H);
+
+    %%%---------------------Cut out point ----------------------
+    Wsub = 30;
+    Hsub = 20;
+    [subMatrix_red, offsetH, offsetW] = subMatrix(red,posX,posY,subMatrixW,subMatrixH)
+
+    
+   %%%---------------Calculate point mid in image - Remember to undistort the cutouts----------------------
+    [y(counter_loop),x(counter_loop)] = midOfMass(subMatrix_red,Wsub,Hsub,offsetW,offsetH)
+
+    
+   %%%---------------------Calculate exact point location - Again remember units eg. mm----------------------
+    [X,Y,Z] = calcWorldPosition(Theta,Phi,xr,yr,f,R,r0);
+
+
+    counter_loop=counter_loop+1;
+
+    
+    %%%---------------------Move setup to new theta angel----------------------
+
+end 
+
+x %prints coordinates
+y
 
 
 
