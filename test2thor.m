@@ -12,13 +12,13 @@ d = imread('Filtter billeder\Laser_on_Light_on_650mn_on_nd_0.4set1_thor.jpg');
 e = imread('Filtter billeder\Laser_on_Light_on_650mn_on_nd_off_set1_thor.jpg');
 original=d;
 
-figure()
+figure(1)
 imshow(original);
 red = original(:,:,1);
 green=original(:,:,2);
 blue=original(:,:,3);
 
-figure()
+figure(2)
 imshow(red);
 
 
@@ -37,11 +37,14 @@ Hsub = 20;
 [submatrix_green,offsetH_g,offsetW_g] = subMatrix(green,location_of_dot_y,location_of_dot_x,Wsub,Hsub)
 [submatrix_blue,offsetH_b,offsetW_b] = subMatrix(blue,location_of_dot_y,location_of_dot_x,Wsub,Hsub)
 
-hsv = rgb2hsv(original);
-[submatrix_hsv,offsetH_b,offsetW_b] = subMatrix(hsv(:,:,3),location_of_dot_y,location_of_dot_x,Wsub,Hsub)
+
 % 
 figure()
 imshow(submatrix_red);
+
+
+hsv = rgb2hsv(original);
+[submatrix_hsv,offsetH_b,offsetW_b] = subMatrix(hsv(:,:,3),location_of_dot_y,location_of_dot_x,Wsub,Hsub)
 
 
 mask=[submatrix_hsv>=0.05 ] ;
@@ -80,17 +83,17 @@ imshow(submatrix_hsv_final_cut);
 
 % Let M be an image matrix with the a single gaussian spot (if you have lots of dots to fit gaussians in a single image you can pull them out by using bwlabel and regionprops Bounding box).
 
-[h,w] = size(submatrix_hsv_final_cut);
+[h,w] = size(submatrix_red);
 
 [X,Y] = meshgrid(1:h,1:w);
-X = X(:); Y=Y(:); Z = submatrix_hsv_final_cut(:);
+X = X(:); Y=Y(:); Z = submatrix_red(:);
 figure(); clf; scatter3(X,Y,Z);
 
 % 2D gaussian fit object
 gauss2 = fittype( @(a1, sigmax, sigmay, x0,y0, x, y) a1*exp(-(x-x0).^2/(2*sigmax^2)-(y-y0).^2/(2*sigmay^2)),...
 'independent', {'x', 'y'},'dependent', 'z' );
 
-a1 = max(submatrix_hsv_final_cut(:)); % height, determine from image. may want to subtract background
+a1 = max(submatrix_red(:)); % height, determine from image. may want to subtract background
 sigmax = 3; % guess width
 sigmay = 3; % guess width
 x0 = 15; % guess position (center seems a good place to start)
@@ -100,6 +103,90 @@ y0 = 10;
 sf = fit([X,Y],double(Z),gauss2,'StartPoint',[a1, sigmax, sigmay, x0,y0]);
 figure(); clf; plot(sf,[X,Y],Z);
 
+sf.x0
+sf.y0
+sf.sigmax
+sf.sigmay
 % sf.x0 and sf.y0 is the center of gaussian.
 % sf.sigmax etc will get you the other parameters.
+
+background=a;
+
+[submatrix_background_red,offsetH_b,offsetW_b] = subMatrix(background(:,:,1),location_of_dot_y,location_of_dot_x,Wsub,Hsub)
+
+figure()
+imshow(background);
+
+figure()
+imshow(submatrix_background_red);
+
+number_of_simulated_images=100;
+lambdahat = poissfit(submatrix_background_red(:));
+
+simulated_images=poissrnd(lambdahat, [Hsub+1,Wsub+1]);
+for i = 1:number_of_simulated_images-1
+       simulated_images=cat(3,simulated_images,poissrnd(lambdahat, [Hsub+1,Wsub+1]));
+end
+
+figure()
+histogram(simulated_images(:,:,1))
+xlabel('Intensity') 
+ylabel('Counter') 
+title('Histogram for picture with background noise simulated as Poission with') 
+
+
+figure()
+histogram(submatrix_background_red)
+xlabel('Intensity') 
+ylabel('Counter') 
+title('Histogram for background noise 21x31 area') 
+
+figure()
+histogram(background(:,:,1))
+xlabel('Intensity') 
+ylabel('Counter') 
+title('Histogram for background noise full') 
+
+figure()
+mesh(simulated_images(:,:,1))
+figure()
+mesh(submatrix_background_red)
+
+% figure()
+% scatter(submatrix_background_red(:,:,1))
+
+% figure()
+% plot(simulated_images(:,:,1))
+% 
+% figure()
+% scatter(simulated_images(:,:,1))
+
+figure()
+mesh(submatrix_red)
+
+
+figure()
+histogram(submatrix_red)
+
+
+% %The next lines is poission noise for hsv pictures
+% background=a;
+% 
+% hsv_background = rgb2hsv(background);
+% [submatrix_hsv_background,offsetH_b,offsetW_b] = subMatrix(hsv_background(:,:,3),location_of_dot_y,location_of_dot_x,Wsub,Hsub)
+% 
+% figure()
+% imshow(hsv_background);
+% 
+% figure()
+% imshow(submatrix_hsv_background);
+% 
+% number_of_simulated_images=100;
+% lambdahat = poissfit(submatrix_hsv_background(:))*1000000;
+% 
+% simulated_images=poissrnd(lambdahat, [Hsub+1,Wsub+1])./1000000;
+% for i = 1:number_of_simulated_images-1
+%        simulated_images=cat(3,simulated_images,poissrnd(lambdahat, [Hsub+1,Wsub+1])./1000000);
+% end
+
 

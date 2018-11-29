@@ -12,14 +12,18 @@ function [location_of_dot_x, location_of_dot_y] = locationDot(image)
 % The next step is to find the first element in "mask" that is 1 and the
 % take the x and y coordinate of this element. 
 
-hsv = rgb2hsv(image);
-figure()
-imshow(hsv);
-
-mask=[(hsv(:,:,1)>=0.91| hsv(:,:,1)==0)& (hsv(:,:,3)>=0.05) ] ;
+% The next line is used for HSV
+% hsv = rgb2hsv(image);
+% figure()
+% imshow(hsv);
+% 
+% mask=[(hsv(:,:,1)>=0.91| hsv(:,:,1)==0)& (hsv(:,:,3)>=0.05) ] ;
+% dot=mask.*hsv;
+% figure()
+% imshow(dot);
 
 % The next line is used for RGB
-% mask=[image(:,:,1)>=10]; 
+mask=[image(:,:,1)>=10]; 
 
 
 [location_of_dot_x,location_of_dot_y] = find(mask == 1,1,'first') ;%finding the first element that is equal to 
@@ -38,8 +42,6 @@ mask=[(hsv(:,:,1)>=0.91| hsv(:,:,1)==0)& (hsv(:,:,3)>=0.05) ] ;
 % location_of_dot_y=ceil(location_of_dot/1080) %rounding up to next integer
 
 
-dot=mask.*hsv;
-figure()
-imshow(dot);
+
 end
 
