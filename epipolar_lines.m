@@ -3,8 +3,8 @@ pi = 3.1415;
 
 %%
 %Parameters
-Theta = 40;%degfrom x axis toward neg z axis(toward world)
-Phi = 20;%deg from x axis toward y (up)
+Theta = 20;%degfrom x axis toward neg z axis(toward world)
+Phi = 50;%deg from x axis toward y (up)
 Theta=-(Theta)*pi/180;
 Phi=(Phi+90)*pi/180;
 
@@ -23,7 +23,7 @@ a1 = R(1,1)*x_lm + R(1,2)*y_lm+R(1,3)*f;
 a2 = R(2,1)*x_lm + R(2,2)*y_lm+R(2,3)*f;
 a3 = R(3,1)*x_lm + R(3,2)*y_lm+R(3,3)*f;
 
-z_l = [-10 -5 -1 -0.1 0.1 1 5 10]';
+z_l = [-10 -2 -1 -0.1 0.1 1 2 10]';
 
 x_cm = f*(a1*z_l+f*r0(1))./(a3*z_l+f*r0(3));
 y_cm = f*(a2*z_l+f*r0(2))./(a3*z_l+f*r0(3));
