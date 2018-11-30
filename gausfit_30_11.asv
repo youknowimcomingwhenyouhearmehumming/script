@@ -51,9 +51,12 @@ gauss2 = fittype( @(b, a1, sigmax, sigmay, x0,y0, x, y) b+a1*exp(-(x-x0).^2/(2*s
 a1 = max(submatrix_red(:)); % height, determine from image. may want to subtract background
 sigmax = 3; % guess width
 sigmay = 3; % guess width
-x0 = 15; % guess position (center seems a good place to start)
-y0 = 10;
+[max_y,max_x] = find(submatrix_red == max(submatrix_red(:)));
+
+x0 = max_x(1); % guess position (center seems a good place to start)
+y0 = max_y(1);
 b = 3.8171;
+
 
 % compute fit
 [fitresult, gof] = fit([xD,yD],zD,gauss2,'StartPoint',[b,a1, sigmax, sigmay, x0,y0]);

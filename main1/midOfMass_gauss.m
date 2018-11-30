@@ -1,35 +1,24 @@
-clear all;
-close all;
-clc;
+function [midOfMass_H,midOfMass_W] = midOfMass_gauss(submatrix,Wsub,Hsub,offsetW,offsetH)
+%SUBsubmatrix Author=Rasmus. The meaning of the function is to determinate the
+%middel of the mass of the laser dot based on the subsubmatrix that is
+%loaded into the funktion. NOTE!!! that it  calculated the middel of all
+%the pixel in the submatrix, so unless that some threshold is added then
+%this calculation will be slightly wrong. 
+%The outout of the funtion is the mddel of the mass in the height and in
+%the width direction
+%   Detailed explanation goes here
 
+xsums = sum(submatrix,2);
+ysums = sum(submatrix,1);
+% figure()
+% subplot(2,1,1)
+% bar(1:Wsub+1,ysums)
+% subplot(2,1,2)
+% bar(1:Hsub+1,xsums)
+SUM = sum(xsums);
+midOfMass_H = (sum(([1:Hsub+1]'.*xsums)')/SUM) + offsetH
+midOfMass_W = (sum(([1:Wsub+1].*ysums))/SUM) + offsetW
 
-% original = imread('Håndmålte billeder\b1.jpg');
-
-a = imread('Filtter billeder\Laser_off_Light_on_650mn_on_nd_0.4_set1_thor.jpg');
-b = imread('Filtter billeder\Laser_off_Light_on_650mn_on_nd_off_set1_thor.jpg');
-c = imread('Filtter billeder\Laser_on_Light_off_650mn_on_nd_0.4set1_thor.jpg');
-d = imread('Filtter billeder\Laser_on_Light_on_650mn_on_nd_0.4set1_thor.jpg');
-e = imread('Filtter billeder\Laser_on_Light_on_650mn_on_nd_off_set1_thor.jpg');
-original=d;
-
-figure(1)
-imshow(original);
-red = original(:,:,1);
-
-figure(2)
-imshow(red);
-
-
-[location_of_dot_y, location_of_dot_x] = locationDot_R_channel(original);
-
-
-Wsub = 30;
-Hsub = 20;
-
-[submatrix_red,offsetH_r,offsetW_r] = subMatrix(red,location_of_dot_y,location_of_dot_x,Wsub,Hsub);
-
-figure()
-imshow(submatrix_red);
 
 
 % Let M be an image matrix with the a single gaussian spot (if you have lots of dots to fit gaussians in a single image you can pull them out by using bwlabel and regionprops Bounding box).
@@ -51,9 +40,12 @@ gauss2 = fittype( @(b, a1, sigmax, sigmay, x0,y0, x, y) b+a1*exp(-(x-x0).^2/(2*s
 a1 = max(submatrix_red(:)); % height, determine from image. may want to subtract background
 sigmax = 3; % guess width
 sigmay = 3; % guess width
-x0 = 15; % guess position (center seems a good place to start)
-y0 = 10;
+[max_y,max_x] = find(submatrix_red == max(submatrix_red(:)));
+
+x0 = max_x(1); % guess position as the maximum value
+y0 = max_y(1);
 b = 3.8171;
+
 
 % compute fit
 [fitresult, gof] = fit([xD,yD],zD,gauss2,'StartPoint',[b,a1, sigmax, sigmay, x0,y0]);
@@ -82,3 +74,9 @@ Rmse = gof.rmse
 
 
 fitresult.b+fitresult.a1*exp(-(16-fitresult.x0).^2/(2*fitresult.sigmax^2)-(11-fitresult.y0).^2/(2*fitresult.sigmay^2))
+
+
+
+
+end
+
