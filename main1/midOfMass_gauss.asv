@@ -17,8 +17,8 @@ function [midOfMass_H,midOfMass_W,rms] = midOfMass_gauss(submatrix,offsetW,offse
 
 Z = submatrix;
 
+%Next two lines is only for plot
 [xD,yD,zD] = prepareSurfaceData(X,Y,Z);
-%Next one line is only for plot
 % figure(); clf; scatter3(xD,yD,zD);
 
 % 2D gaussian fit object
@@ -42,11 +42,11 @@ b = 3.8171;
 
 midOfMass_H =fitresult.x0+ offsetH;
 midOfMass_W=fitresult.y0 + offsetW;
-rms = gof.rmse;
+rms = gof.rmse
 
 
 % % Next lines is only or plot
-% Plot fit with data.
+% % Plot fit with data.
 % figure( 'Name', 'gauss_2d' );clf;
 % h = plot( fitresult, [xD, yD], zD );
 % legend( h, 'gauss_2d', 'submatrix vs. X, Y', 'Location', 'NorthEast' );
