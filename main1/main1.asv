@@ -83,7 +83,7 @@ while true
     %%%---------------------Take an image%pick a camera----------------------
     pic = snapshot(cam);
     red=pic(:,:,1);%takes just the red channel of image
-    imshow(red);
+    %imshow(red);
     %%%---------------------Get angles of laser----------------------
     Theta = input('Enter Theta and press enter: ');
     Phi = input('Enter Phi and press enter: ');
