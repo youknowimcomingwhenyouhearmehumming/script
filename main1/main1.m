@@ -97,7 +97,7 @@ while true
 
     
    %%%---------------Calculate point mid in image - Remember to undistort the cutouts----------------------
-    [y(counter_loop),x(counter_loop)] = midOfMass(subMatrix_red,Wsub,Hsub,offsetW,offsetH)
+    [y(counter_loop),x(counter_loop)] = midOfMass_gauss(subMatrix_red,Wsub,Hsub,offsetW,offsetH)
 
     
    %%%---------------------Calculate exact point location - Again remember units eg. mm----------------------

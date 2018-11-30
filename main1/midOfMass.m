@@ -1,4 +1,4 @@
-function [midOfMass_H,midOfMass_W] = midOfMass(submatrix,Wsub,Hsub,offsetW,offsetH)
+function [midOfMass_H,midOfMass_W] = midOfMass_weighted_sum(submatrix,Wsub,Hsub,offsetW,offsetH)
 %SUBsubmatrix Author=Rasmus. The meaning of the function is to determinate the
 %middel of the mass of the laser dot based on the subsubmatrix that is
 %loaded into the funktion. NOTE!!! that it  calculated the middel of all
