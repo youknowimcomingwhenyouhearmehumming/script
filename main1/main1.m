@@ -69,16 +69,17 @@ baseLineLength = 250;
 x=[] %X and y coordinates of the laser. One entry pr. loop
 y=[]
 
+camlist=webcamlist
+cam = webcam('C922')
+
 counter_loop=1;
 while true
-        if counter_loop=counter_loop>10
+        if counter_loop==counter_loop>10
             break
         end
 
 
     %%%---------------------Take an image%pick a camera----------------------
-    %webcamlist
-    %cam = webcam('C922')
     pic = snapshot(cam);
     red=pic(:,:,1);%takes just the red channel of image
 

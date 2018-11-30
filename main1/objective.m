@@ -89,6 +89,6 @@ errors(19) =  ((r31^2+r32^2+r33^2 - 1))*orthonormalityWeight;
 errors(20) =  ((r11*r21+r12*r22+r13*r23)*1)*orthonormalityWeight;
 errors(21) =  ((r21*r31+r22*r32+r23*r33)*1)*orthonormalityWeight;
 errors(22) =  ((r11*r31+r12*r32+r13*r33)*1)*orthonormalityWeight;
-errors'
+errors';
 end
 
