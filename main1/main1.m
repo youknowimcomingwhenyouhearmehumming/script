@@ -56,8 +56,8 @@ imgW = 1920;
 imgH = 1080;
 
 
-camlist = webcamlist
-cam = webcam('C922')
+% camlist = webcamlist
+% cam = webcam('C922')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
@@ -70,6 +70,8 @@ cam = webcam('C922')
 %%%---------------------Loop that countinues---------------------
 x=[] %X and y coordinates of the laser. One entry pr. loop
 y=[]
+rms=[] %the valus should be higher than 0.95 otherwise there the picture 
+%was too bad to make a gauss fit from
 
 
 
@@ -81,24 +83,31 @@ while true
 
 
     %%%---------------------Take an image%pick a camera----------------------
-    pic = snapshot(cam);
+%     pic = snapshot(cam);
+    
+    pic = imread('Laser_on_Light_on_650mn_on_nd_0.4set1_thor.jpg'); %Dette er bare et test billede til at debugge
     red=pic(:,:,1);%takes just the red channel of image
+    figure()
     imshow(red);
+    
+    
+    
     %%%---------------------Get angles of laser----------------------
     Theta = input('Enter Theta and press enter: ');
     Phi = input('Enter Phi and press enter: ');
-
+    searchLineWidtPixels=input('Enter searchLineWidtPixels and press enter: ');
     %%%---------------------Search Along epipolar lines----------------------
-    [posX,posY] = searchEpiLine(red,imgW,imgH,Theta,Phi,R,r0,f,searchLineWidtPixels,pix_W,pix_H);
-
+%     [posX,posY] = searchEpiLine(red,imgW,imgH,Theta,Phi,R,r0,f,searchLineWidtPixels,pix_W,pix_H);
+    [posX,posY]=locationDot_R_channel(red); %This is just beacuse we don't yet know the ph and theta to use in searchepilines
+    
     %%%---------------------Cut out point ----------------------
     Wsub = 30;
     Hsub = 20;
-    [subMatrix_red, offsetH, offsetW] = subMatrix(red,posX,posY,subMatrixW,subMatrixH)
+    [subMatrix_red, offsetH, offsetW] = subMatrix(red,posX,posY,Wsub,Hsub);
 
     
    %%%---------------Calculate point mid in image - Remember to undistort the cutouts----------------------
-    [y(counter_loop),x(counter_loop)] = midOfMass_gauss(subMatrix_red,Wsub,Hsub,offsetW,offsetH)
+    [y(counter_loop),x(counter_loop),rms(counter_loop)] = midOfMass_gauss(subMatrix_red,offsetW,offsetH)
 
     
    %%%---------------------Calculate exact point location - Again remember units eg. mm----------------------

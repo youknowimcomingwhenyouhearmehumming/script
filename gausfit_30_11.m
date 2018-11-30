@@ -48,11 +48,11 @@ figure(); clf; scatter3(xD,yD,zD);
 gauss2 = fittype( @(b, a1, sigmax, sigmay, x0,y0, x, y) b+a1*exp(-(x-x0).^2/(2*sigmax^2)-(y-y0).^2/(2*sigmay^2)),...
 'independent', {'x', 'y'},'dependent', 'z' );
 
+%Next 7 lines is guess parameters
 a1 = max(submatrix_red(:)); % height, determine from image. may want to subtract background
 sigmax = 3; % guess width
 sigmay = 3; % guess width
 [max_y,max_x] = find(submatrix_red == max(submatrix_red(:)));
-
 x0 = max_x(1); % guess position as the maximum value
 y0 = max_y(1);
 b = 3.8171;
