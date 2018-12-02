@@ -42,10 +42,10 @@ camera_points(:,1) = -(camera_points(:,1)-imgW/2)*pix_W;
 camera_points(:,2) = (camera_points(:,2)-imgH/2)*pix_H;
 
 %x = [r11,  r12,    r13,    r14,    r21,    r22,    r23,    r24,    r31,    r32,    r33,    r34,    zl1,    zl2,    zl3,    zl4,    zl5,    zr1,    zr2,    zr3,    zr4,    zr5]
-lb = [0.9   -0.2    -0.2    -500    -0.2    0.8     -0.2    -10    -0.2    -0.2    0.8     -10    -5000   -5000   -5000   -5000   -5000   -5000   -5000   -5000   -5000   -5000];
-ub = [1.1   0.2     0.2     -100    0.2     1.2     0.2     10     0.2     0.2     1.2     10     -500    -500    -500    -500    -500    -500    -500    -500    -500    -500];
+lb = [0.8   -0.5    -0.5    -500    -0.5    0.8     -0.5    -30    -0.5    -0.5    0.8     -30    -2000   -2000   -2000   -2000   -2000   -2000   -2000   -2000   -2000   -2000];
+ub = [1.2   0.5     0.5     -100    0.5     1.2     0.5     30     0.5     0.5     1.2     30     -100    -100    -100    -100    -100    -100    -100    -100    -100    -100];
 
-options = optimoptions(@lsqnonlin,'OptimalityTolerance',10^-10,'StepTolerance',10^-10,'FunctionTolerance',10^-10,'MaxFunctionEvaluations',100000,'MaxIterations',10000);
+options = optimoptions(@lsqnonlin,'OptimalityTolerance',10^-10,'StepTolerance',10^-10,'FunctionTolerance',10^-12,'MaxFunctionEvaluations',200000,'MaxIterations',10000);
 x = lsqnonlin(@(x)objective(x,laser_points,camera_points,f,baseLineLength),x0',lb',ub',options);
 
 R = [   x(1) x(2) x(3);
