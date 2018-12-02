@@ -28,7 +28,7 @@ y_cm = round(y_cm./pix_H)+0.5*imgH;
 %Find max
 maxVal = 0;
 for i = 1:imgW
-    for j = 1:searchLineWidtPixels*2;
+    for j = 1:searchLineWidtPixels*2
         if imageData(y_cm(i)+j-searchLineWidtPixels,x_cm(i)) > maxVal
             maxVal = imageData(y_cm(i)+j-searchLineWidtPixels,x_cm(i));
             posX = x_cm(i);
