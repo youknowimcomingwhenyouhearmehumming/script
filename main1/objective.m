@@ -75,7 +75,7 @@ errors(8) = (r21*xl3+r22*yl3+r23*f+r24*f/zl3 - yr3*zr3/zl3);
 errors(9) = (r31*xl3+r32*yl3+r33*f+r34*f/zl3 - f*zr3/zl3);
 errors(10) = (r11*xl4+r12*yl4+r13*f+r14*f/zl4 - xr4*zr4/zl4);
 errors(11) = (r21*xl4+r22*yl4+r23*f+r24*f/zl4 - yr4*zr4/zl4);
-errors(12) = (r31*xl4+r32*yl4+r33*f+r34*f/zl4 - f*zr4/zl4)^2;
+errors(12) = (r31*xl4+r32*yl4+r33*f+r34*f/zl4 - f*zr4/zl4);
 errors(13) = (r11*xl5+r12*yl5+r13*f+r14*f/zl5 - xr5*zr5/zl5);
 errors(14) = (r21*xl5+r22*yl5+r23*f+r24*f/zl5 - yr5*zr5/zl5);
 errors(15) = (r31*xl5+r32*yl5+r33*f+r34*f/zl5 - f*zr5/zl5);
@@ -89,6 +89,6 @@ errors(19) =  ((r31^2+r32^2+r33^2 - 1))*orthonormalityWeight;
 errors(20) =  ((r11*r21+r12*r22+r13*r23)*1)*orthonormalityWeight;
 errors(21) =  ((r21*r31+r22*r32+r23*r33)*1)*orthonormalityWeight;
 errors(22) =  ((r11*r31+r12*r32+r13*r33)*1)*orthonormalityWeight;
-errors';
+errors'
 end
 
