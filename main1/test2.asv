@@ -1,0 +1,31 @@
+clear;
+
+
+camlist = webcamlist;
+cam = webcam('C922');
+cam.AvailableResolution;
+cam.Resolution = '2304x1536';
+image = preview(cam)
+
+%%
+img = snapshot(cam);
+figure()
+imshow(img)
+
+imwrite(img, 'b01.tif');
+
+counter_loop=1;
+while true
+    counter_loop
+        if counter_loop==counter_loop>100
+            break
+        end
+    img = snapshot(cam);
+
+    sprintf ( 'A%i.tif', i ),
+    %%%---------------------Take an image%pick a camera----------------------
+%     pic = snapshot(cam);
+    
+end 
+
+    

@@ -10,7 +10,7 @@ function errors = objective(x,laser_points,camera_points,f,baseLineLength)
 %
 %x = [r11, r12, r13, r14, r21, r22, r23, r24, r31, r32, r33, r34, zl1,
 %zl2, zl3, zl4, zl5, zr1, zr2, zr3, zr4, zr5]
-orthonormalityWeight = 10000;
+orthonormalityWeight = 1000;
 
 x = x';
 r11 = x(1,1);
@@ -61,34 +61,34 @@ yr4 = camera_points(4,2);
 yr5 = camera_points(5,2);
 
 %%
-errors = zeros(3*5,1);
+errors = zeros(22,1);
 
-errors(1) = (r11*xl1+r12*yl1+r13*f+r14*f/zl1 - (xr1*zr1/zl1));
-errors(2) = (r21*xl1+r22*yl1+r23*f+r24*f/zl1 - (yr1*zr1/zl1));
-errors(3) = (r31*xl1+r32*yl1+r33*f+r34*f/zl1 - (f*zr1/zl1));
+errors(1) = (r11*xl1+r12*yl1+r13*f+r14*f/zl1 - (xr1*zr1/zl1))^2;
+errors(2) = (r21*xl1+r22*yl1+r23*f+r24*f/zl1 - (yr1*zr1/zl1))^2;
+errors(3) = (r31*xl1+r32*yl1+r33*f+r34*f/zl1 - (f*zr1/zl1))^2;
 
-errors(4) = (r11*xl2+r12*yl2+r13*f+r14*f/zl2 - xr2*zr2/zl2);
-errors(5) = (r21*xl2+r22*yl2+r23*f+r24*f/zl2 - yr2*zr2/zl2);
-errors(6) = (r31*xl2+r32*yl2+r33*f+r34*f/zl2 - f*zr2/zl2);
-errors(7) = (r11*xl3+r12*yl3+r13*f+r14*f/zl3 - xr3*zr3/zl3);
-errors(8) = (r21*xl3+r22*yl3+r23*f+r24*f/zl3 - yr3*zr3/zl3);
-errors(9) = (r31*xl3+r32*yl3+r33*f+r34*f/zl3 - f*zr3/zl3);
-errors(10) = (r11*xl4+r12*yl4+r13*f+r14*f/zl4 - xr4*zr4/zl4);
-errors(11) = (r21*xl4+r22*yl4+r23*f+r24*f/zl4 - yr4*zr4/zl4);
-errors(12) = (r31*xl4+r32*yl4+r33*f+r34*f/zl4 - f*zr4/zl4);
-errors(13) = (r11*xl5+r12*yl5+r13*f+r14*f/zl5 - xr5*zr5/zl5);
-errors(14) = (r21*xl5+r22*yl5+r23*f+r24*f/zl5 - yr5*zr5/zl5);
-errors(15) = (r31*xl5+r32*yl5+r33*f+r34*f/zl5 - f*zr5/zl5);
+errors(4) = (r11*xl2+r12*yl2+r13*f+r14*f/zl2 - xr2*zr2/zl2)^2;
+errors(5) = (r21*xl2+r22*yl2+r23*f+r24*f/zl2 - yr2*zr2/zl2)^2;
+errors(6) = (r31*xl2+r32*yl2+r33*f+r34*f/zl2 - f*zr2/zl2)^2;
+errors(7) = (r11*xl3+r12*yl3+r13*f+r14*f/zl3 - xr3*zr3/zl3)^2;
+errors(8) = (r21*xl3+r22*yl3+r23*f+r24*f/zl3 - yr3*zr3/zl3)^2;
+errors(9) = (r31*xl3+r32*yl3+r33*f+r34*f/zl3 - f*zr3/zl3)^2;
+errors(10) = (r11*xl4+r12*yl4+r13*f+r14*f/zl4 - xr4*zr4/zl4)^2;
+errors(11) = (r21*xl4+r22*yl4+r23*f+r24*f/zl4 - yr4*zr4/zl4)^2;
+errors(12) = (r31*xl4+r32*yl4+r33*f+r34*f/zl4 - f*zr4/zl4)^2;
+errors(13) = (r11*xl5+r12*yl5+r13*f+r14*f/zl5 - xr5*zr5/zl5)^2;
+errors(14) = (r21*xl5+r22*yl5+r23*f+r24*f/zl5 - yr5*zr5/zl5)^2;
+errors(15) = (r31*xl5+r32*yl5+r33*f+r34*f/zl5 - f*zr5/zl5)^2;
 
-errors(16) =  (dot([r14;r24;r34],[r14;r24;r34])-baseLineLength^2)*orthonormalityWeight;
+errors(16) =  (dot([r14;r24;r34],[r14;r24;r34])-baseLineLength^2)^2*orthonormalityWeight;
 
-errors(17) =  ((r11^2+r12^2+r13^2 - 1))*orthonormalityWeight;
-errors(18) =  ((r21^2+r22^2+r23^2 - 1))*orthonormalityWeight;
-errors(19) =  ((r31^2+r32^2+r33^2 - 1))*orthonormalityWeight;
+errors(17) =  ((r11^2+r12^2+r13^2 - 1))^2*orthonormalityWeight;
+errors(18) =  ((r21^2+r22^2+r23^2 - 1))^2*orthonormalityWeight;
+errors(19) =  ((r31^2+r32^2+r33^2 - 1))^2*orthonormalityWeight;
 
-errors(20) =  ((r11*r21+r12*r22+r13*r23)*1)*orthonormalityWeight;
-errors(21) =  ((r21*r31+r22*r32+r23*r33)*1)*orthonormalityWeight;
-errors(22) =  ((r11*r31+r12*r32+r13*r33)*1)*orthonormalityWeight;
+errors(20) =  ((r11*r21+r12*r22+r13*r23)*1)^2*orthonormalityWeight;
+errors(21) =  ((r21*r31+r22*r32+r23*r33)*1)^2*orthonormalityWeight;
+errors(22) =  ((r11*r31+r12*r32+r13*r33)*1)^2*orthonormalityWeight;
 errors';
 end
 

@@ -1,5 +1,5 @@
 clear;
-pi = 3.1415;
+%pi = 3.1415;
 
 %%
 %Parameters
@@ -87,3 +87,34 @@ xlabel('x_c [mm]')
 ylabel('y_c [mm]')
 title('Camera image plane')
 plot(x_lm,y_lm,'x')
+
+
+
+%%
+%How far is it even between the lines
+Theta = 20;%degfrom x axis toward neg z axis(toward world)
+Phi = 50;%deg from x axis toward y (up)
+Theta=-(Theta)*pi/180;
+Phi=(Phi+90)*pi/180;
+
+R = [1 0 0;
+     0 1 0;
+     0 0 1];
+r0 = [-10;0;0];
+
+f = 6;
+%%
+
+x_lm = f/tan(Theta);
+y_lm = f/tan(Phi);
+
+a1 = R(1,1)*x_lm + R(1,2)*y_lm+R(1,3)*f;
+a2 = R(2,1)*x_lm + R(2,2)*y_lm+R(2,3)*f;
+a3 = R(3,1)*x_lm + R(3,2)*y_lm+R(3,3)*f;
+
+z_l = [-10 -2 -1 -0.1 0.1 1 2 10]';
+
+y_ = f*(a2*z_l+f*r0(2))./(a3*z_l+f*r0(3));
+
+
+
