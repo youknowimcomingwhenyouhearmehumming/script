@@ -8,11 +8,11 @@ imgH = size(images{1},1);
 imgW = size(images{1},2);
 searchLineWidtPixels = imgH/2;%passing Phi = 0 and imgW/2 ensures the entire picture is searched by searchEpiLine
 
-[posX1,posY1] = searchEpiLine(images{1}(:,:,1),imgW,imgH,angles(1,1),0,Rguess,r0guess,f,searchLineWidtPixels,pix_W,pix_H)
-[posX2,posY2] = searchEpiLine(images{2}(:,:,1),imgW,imgH,angles(1,1),0,Rguess,r0guess,f,searchLineWidtPixels,pix_W,pix_H)
-[posX3,posY3] = searchEpiLine(images{3}(:,:,1),imgW,imgH,angles(1,1),0,Rguess,r0guess,f,searchLineWidtPixels,pix_W,pix_H)
-[posX4,posY4] = searchEpiLine(images{4}(:,:,1),imgW,imgH,angles(1,1),0,Rguess,r0guess,f,searchLineWidtPixels,pix_W,pix_H)
-[posX5,posY5] = searchEpiLine(images{5}(:,:,1),imgW,imgH,angles(1,1),0,Rguess,r0guess,f,searchLineWidtPixels,pix_W,pix_H)
+[posX1,posY1] = searchEpiLine(images{1}(:,:,1),imgW,imgH,angles(1,1),0,Rguess,r0guess,f,searchLineWidtPixels,pix_W,pix_H);
+[posX2,posY2] = searchEpiLine(images{2}(:,:,1),imgW,imgH,angles(1,1),0,Rguess,r0guess,f,searchLineWidtPixels,pix_W,pix_H);
+[posX3,posY3] = searchEpiLine(images{3}(:,:,1),imgW,imgH,angles(1,1),0,Rguess,r0guess,f,searchLineWidtPixels,pix_W,pix_H);
+[posX4,posY4] = searchEpiLine(images{4}(:,:,1),imgW,imgH,angles(1,1),0,Rguess,r0guess,f,searchLineWidtPixels,pix_W,pix_H);
+[posX5,posY5] = searchEpiLine(images{5}(:,:,1),imgW,imgH,angles(1,1),0,Rguess,r0guess,f,searchLineWidtPixels,pix_W,pix_H);
 
 subMatrixW = 10;
 subMatrixH = 10;
@@ -64,27 +64,27 @@ z_axis = R*[0;0;1]+r0;
 
 
 %To test
-figure(1)
-plot3(0,0,0,'o')
-hold on
-grid on
-plot3([0 10],[0 0],[0 0],'linewidth',2)
-plot3([0 0],[0 10],[0 0],'linewidth',2)
-plot3([0 0],[0 0],[0 10],'linewidth',2)
+figure(1);
+plot3(0,0,0,'o');
+hold on;
+grid on;
+plot3([0 10],[0 0],[0 0],'linewidth',2);
+plot3([0 0],[0 10],[0 0],'linewidth',2);
+plot3([0 0],[0 0],[0 10],'linewidth',2);
 
-plot3(r0(1,1),r0(2,1),r0(3,1),'x')
+plot3(r0(1,1),r0(2,1),r0(3,1),'x');
 % plot3([0 r11]+r14,[0 r21]+r24,[0 r31]+r34)
 % plot3([0 r12]+r14,[0 r22]+r24,[0 r32]+r34)
 % plot3([0 r13]+r14,[0 r23]+r24,[0 r33]+r34)
-plot3([r0(1) x_axis(1,1)],[r0(2) x_axis(2,1)],[r0(3) x_axis(3,1)],'linewidth',2)
-plot3([r0(1) y_axis(1,1)],[r0(2) y_axis(2,1)],[r0(3) y_axis(3,1)],'linewidth',2)
-plot3([r0(1) z_axis(1,1)],[r0(2) z_axis(2,1)],[r0(3) z_axis(3,1)],'linewidth',2)
+plot3([r0(1) x_axis(1,1)],[r0(2) x_axis(2,1)],[r0(3) x_axis(3,1)],'linewidth',2);
+plot3([r0(1) y_axis(1,1)],[r0(2) y_axis(2,1)],[r0(3) y_axis(3,1)],'linewidth',2);
+plot3([r0(1) z_axis(1,1)],[r0(2) z_axis(2,1)],[r0(3) z_axis(3,1)],'linewidth',2);
 %plot3(pointsx,pointsy,pointsz,'x')
 %axis([-12 2 -12 2 -12 2])
-xlabel('X')
-ylabel('Y')
-zlabel('Z')
-legend('0','X','Y','Z','0','X','Y','Z')
+xlabel('X');
+ylabel('Y');
+zlabel('Z');
+legend('0','X','Y','Z','0','X','Y','Z');
 
 end
 

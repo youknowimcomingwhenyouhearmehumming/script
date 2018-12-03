@@ -16,8 +16,8 @@ ysums = sum(submatrix,1);
 % subplot(2,1,2)
 % bar(1:Hsub+1,xsums)
 SUM = sum(xsums);
-midOfMass_H = (sum(([1:Hsub+1]'.*xsums)')/SUM) + offsetH
-midOfMass_W = (sum(([1:Wsub+1].*ysums))/SUM) + offsetW
+midOfMass_H = (sum(([1:Hsub+1]'.*xsums)')/SUM) + offsetH;
+midOfMass_W = (sum(([1:Wsub+1].*ysums))/SUM) + offsetW;
 
 
 

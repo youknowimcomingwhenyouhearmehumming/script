@@ -19,7 +19,7 @@ cameraParams.ImageSize = [480 640];
 
 % For external calibration run function below with 5 undistorted images of a laser dot
 % Also pass the laser angles for each
-run('TestImages30_11\Measurements.m')
+run('C:\Users\Xean\Documents\Git\TestImages30_11\Measurements.m')
 
 imgW = 640;
 imgH = 480;
@@ -113,7 +113,7 @@ while true
    %%%---------------Calculate point mid in image - Remember to undistort the cutouts----------------------
     [y(counter_loop),x(counter_loop),rms(counter_loop)] = midOfMass_gauss(subMatrix_red,offsetW,offsetH)
 
-    
+    yr = y(counter_loop); xr = x(counter_loop);
    %%%---------------------Calculate exact point location - Again remember units eg. mm----------------------
     [X,Y,Z] = calcWorldPosition(Theta,Phi,xr,yr,f,R,r0);
 
