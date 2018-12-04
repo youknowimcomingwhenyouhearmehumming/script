@@ -11,9 +11,9 @@ yto = (pointY+ceil(subMatrixH/2));
 xfrom = (pointX-floor(subMatrixW/2));
 xto = (pointX+ceil(subMatrixW/2));
 
-subMatrix = matrix(yfrom:yto,xfrom:xto);
+subMatrix = matrix(yfrom+1:yto,xfrom+1:xto);
 
-offsetH = pointY-floor(subMatrixH/2);
-offsetW = pointX-floor(subMatrixW/2);
+offsetH = yfrom;
+offsetW = xfrom;
 end
 

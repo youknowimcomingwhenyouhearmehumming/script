@@ -96,12 +96,12 @@ Hsub = 20;
 offsetW = 0;
 offsetH = 0;
 
-[ymid_1,xmid_1] = midOfMass_weighted_sum(subMatrix1,Wsub,Hsub,offsetW1,offsetH1);
-[ymid_3,xmid_3] = midOfMass_weighted_sum(subMatrix3,Wsub,Hsub,offsetW3,offsetH3);
-[ymid_4,xmid_4] = midOfMass_weighted_sum(subMatrix4,Wsub,Hsub,offsetW4,offsetH4);
-[ymid_5,xmid_5] = midOfMass_weighted_sum(subMatrix5,Wsub,Hsub,offsetW5,offsetH5);
-[ymid_6,xmid_6] = midOfMass_weighted_sum(subMatrix6,Wsub,Hsub,offsetW6,offsetH6);
-[ymid_7,xmid_7] = midOfMass_weighted_sum(subMatrix7,Wsub,Hsub,offsetW7,offsetH7);
+[ymid_1,xmid_1] = midOfMass_gauss(subMatrix1,offsetW1,offsetH1);
+[ymid_3,xmid_3] = midOfMass_gauss(subMatrix3,offsetW3,offsetH3);
+[ymid_4,xmid_4] = midOfMass_gauss(subMatrix4,offsetW4,offsetH4);
+[ymid_5,xmid_5] = midOfMass_gauss(subMatrix5,offsetW5,offsetH5);
+[ymid_6,xmid_6] = midOfMass_gauss(subMatrix6,offsetW6,offsetH6);
+[ymid_7,xmid_7] = midOfMass_gauss(subMatrix7,offsetW7,offsetH7);
 
 %Convert from pixel value to mm and move origo to middle
 xmid1_mm = (xmid_1-imgW/2)*pix_W;
@@ -118,9 +118,9 @@ xmid7_mm = (xmid_7-imgW/2)*pix_W;
 ymid7_mm = (ymid_7-imgH/2)*pix_H;
 
 figure(1)
-imshow(img_7(:,:,1))
+imshow(img_4(:,:,1))
 hold on
-plot(xmid_7,ymid_7,'x')
+plot(xmid_4,ymid_4,'x')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%Find world coordinate
 
 X=zeros(7,1);
@@ -143,7 +143,51 @@ xlabel('X')
 ylabel('Y')
 zlabel('Z')
 
+%%
+ymid5_mm
+xmid5_mm
 
+
+ymes5 = Y_measured(5)
+zmes5 = Z_measured(5)
+xmes5 = X_measured(5)
+
+pitchCam_rad = -atan(ymid5_mm/f)+atan(ymes5/zmes5)
+yawCam_rad = -atan(xmid5_mm/f)+atan(xmes5/zmes5)
+
+v = pitchCam_rad
+R_camoff = [1 0 0; 0 cos(v) sin(v); 0 -sin(v) cos(v)]
+v = yawCam_rad
+R_camoff = R_camoff * [cos(v) 0 sin(v); 0 1 0; -sin(v) 0 cos(v)]
+
+
+newP = R_camoff*[X([1 3 4 5 6 7])'; Y([1 3 4 5 6 7])'; Z([1 3 4 5 6 7])']
+figure(3)
+%plot3(X_measured-X_measured(1),Y_measured-Y_measured(1),Z_measured-Z_measured(1),'x')
+plot3(X_measured,Y_measured,Z_measured,'x')
+hold on
+%plot3(X([1 3 4 5 6 7])-X(1),Y([1 3 4 5 6 7])-Y(1),Z([1 3 4 5 6 7])-Z(1),'o')
+plot3(X([1 3 4 5 6 7]),Y([1 3 4 5 6 7]),Z([1 3 4 5 6 7]),'o')
+plot3(newP(1,:),newP(2,:),newP(3,:),'x')
+xlabel('X')
+ylabel('Y')
+zlabel('Z')
+
+
+
+%Distance between the points
+
+%p1 to p3
+sqrt((X(1)-X(3))^2+(Y(1)-Y(3))^2+(Z(1)-Z(3))^2)
+sqrt((X_measured(1)-X_measured(3))^2+(Y_measured(1)-Y_measured(3))^2+(Z_measured(1)-Z_measured(3))^2)
+
+%p3 to p4
+sqrt((X(3)-X(4))^2+(Y(3)-Y(4))^2+(Z(3)-Z(4))^2)
+sqrt((X_measured(3)-X_measured(4))^2+(Y_measured(3)-Y_measured(4))^2+(Z_measured(3)-Z_measured(4))^2)
+
+%p4 to p5
+sqrt((X(4)-X(5))^2+(Y(4)-Y(5))^2+(Z(4)-Z(5))^2)
+sqrt((X_measured(4)-X_measured(5))^2+(Y_measured(4)-Y_measured(5))^2+(Z_measured(4)-Z_measured(5))^2)
 
 %%
 
@@ -157,13 +201,6 @@ y=[]
 rms=[] %the valus should be higher than 0.95 otherwise there the picture 
 %was too bad to make a gauss fit from
 
-
-
-counter_loop=1;
-while true
-        if counter_loop==counter_loop>10
-            break
-        end
 
 
     %%%---------------------Take an image%pick a camera----------------------
@@ -208,15 +245,14 @@ while true
     
     
    %%%---------------------Calculate exact point location - Again remember units eg. mm----------------------
-    [X,Y,Z] = calcWorldPosition(Theta(1),Phi(1),xmid_1,ymid_1,f,R,r0);
+    %[X,Y,Z] = calcWorldPosition(Theta(1),Phi(1),xmid_1,ymid_1,f,R,r0);
 
 
-    counter_loop=counter_loop+1;
+    %counter_loop=counter_loop+1;
 
     
     %%%---------------------Move setup to new theta angel----------------------
 
-end 
 
 x %prints coordinates
 y

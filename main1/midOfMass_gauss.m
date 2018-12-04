@@ -40,13 +40,13 @@ b = 3.8171;
 % plot(sf,[xD,yD],zD);
 
 
-midOfMass_H =fitresult.x0+ offsetH;
-midOfMass_W=fitresult.y0 + offsetW;
+midOfMass_H =fitresult.y0+ offsetH;
+midOfMass_W=fitresult.x0 + offsetW;
 rms = gof.rmse;
 
 
 % % Next lines is only or plot
-% Plot fit with data.
+%Plot fit with data.
 % figure( 'Name', 'gauss_2d' );clf;
 % h = plot( fitresult, [xD, yD], zD );
 % legend( h, 'gauss_2d', 'submatrix vs. X, Y', 'Location', 'NorthEast' );
