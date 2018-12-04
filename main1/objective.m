@@ -10,7 +10,7 @@ function errors = objective(x,laser_points,camera_points,f,baseLineLength)
 %
 %x = [r11, r12, r13, r14, r21, r22, r23, r24, r31, r32, r33, r34, zl1,
 %zl2, zl3, zl4, zl5, zr1, zr2, zr3, zr4, zr5]
-orthonormalityWeight = 1000;
+orthonormalityWeight = 10000;
 
 x = x';
 r11 = x(1,1);
@@ -89,6 +89,6 @@ errors(19) =  ((r31^2+r32^2+r33^2 - 1))^2*orthonormalityWeight;
 errors(20) =  ((r11*r21+r12*r22+r13*r23)*1)^2*orthonormalityWeight;
 errors(21) =  ((r21*r31+r22*r32+r23*r33)*1)^2*orthonormalityWeight;
 errors(22) =  ((r11*r31+r12*r32+r13*r33)*1)^2*orthonormalityWeight;
-errors';
+errors'
 end
 

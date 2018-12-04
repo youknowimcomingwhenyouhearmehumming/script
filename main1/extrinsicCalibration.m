@@ -23,11 +23,11 @@ subMatrixH = 10;
 [subMatrix4, offsetH4, offsetW4] = subMatrix(images{4}(:,:,1),posX4,posY4,subMatrixW,subMatrixH);
 [subMatrix5, offsetH5, offsetW5] = subMatrix(images{5}(:,:,1),posX5,posY5,subMatrixW,subMatrixH);
 
-[midOfMass_H1,midOfMass_W1] = midOfMass(subMatrix1,subMatrixW,subMatrixH,offsetW1,offsetH1);
-[midOfMass_H2,midOfMass_W2] = midOfMass(subMatrix2,subMatrixW,subMatrixH,offsetW2,offsetH2);
-[midOfMass_H3,midOfMass_W3] = midOfMass(subMatrix3,subMatrixW,subMatrixH,offsetW3,offsetH3);
-[midOfMass_H4,midOfMass_W4] = midOfMass(subMatrix4,subMatrixW,subMatrixH,offsetW4,offsetH4);
-[midOfMass_H5,midOfMass_W5] = midOfMass(subMatrix5,subMatrixW,subMatrixH,offsetW5,offsetH5);
+[midOfMass_H1,midOfMass_W1] = midOfMass_weighted_sum(subMatrix1,subMatrixW,subMatrixH,offsetW1,offsetH1);
+[midOfMass_H2,midOfMass_W2] = midOfMass_weighted_sum(subMatrix2,subMatrixW,subMatrixH,offsetW2,offsetH2);
+[midOfMass_H3,midOfMass_W3] = midOfMass_weighted_sum(subMatrix3,subMatrixW,subMatrixH,offsetW3,offsetH3);
+[midOfMass_H4,midOfMass_W4] = midOfMass_weighted_sum(subMatrix4,subMatrixW,subMatrixH,offsetW4,offsetH4);
+[midOfMass_H5,midOfMass_W5] = midOfMass_weighted_sum(subMatrix5,subMatrixW,subMatrixH,offsetW5,offsetH5);
 
 laser_points(:,1) = -tan((90-angles(:,1))*pi/180)*f;
 laser_points(:,2) = -tan((angles(:,2))*pi/180)*f;
@@ -42,12 +42,12 @@ camera_points(:,1) = -(camera_points(:,1)-imgW/2)*pix_W;
 camera_points(:,2) = (camera_points(:,2)-imgH/2)*pix_H;
 
 %x = [r11,  r12,    r13,    r14,    r21,    r22,    r23,    r24,    r31,    r32,    r33,    r34,    zl1,    zl2,    zl3,    zl4,    zl5,    zr1,    zr2,    zr3,    zr4,    zr5]
-lb = [0.8   -0.5    -0.5    -500    -0.5    0.8     -0.5    -30    -0.5    -0.5    0.8     -30    -2000   -2000   -2000   -2000   -2000   -2000   -2000   -2000   -2000   -2000];
-ub = [1.2   0.5     0.5     -100    0.5     1.2     0.5     30     0.5     0.5     1.2     30     -100    -100    -100    -100    -100    -100    -100    -100    -100    -100];
+lb = [1-0.1   -0.1     -0.1     -260    -0.1     1-0.1     -0.1     -10    -0.1     -0.1     1-0.1     -10    -1400  -1400   -1400   -1000   -1400   -1400   -1400   -1400   -1000   -1400];
+ub = [1+0.1   0.1      0.1      -240    0.1      1+0.1     0.1      10     0.1      0.1      1+0.1     10     -1300    -1300    -1300    -800    -1300   -1300    -1300    -1300    -800    -1300];
 
-options = optimoptions(@lsqnonlin,'OptimalityTolerance',10^-10,'StepTolerance',10^-10,'FunctionTolerance',10^-12,'MaxFunctionEvaluations',200000,'MaxIterations',10000);
+options = optimoptions(@lsqnonlin,'OptimalityTolerance',10^-10,'StepTolerance',10^-12,'FunctionTolerance',10^-10,'MaxFunctionEvaluations',500000,'MaxIterations',20000);
 x = lsqnonlin(@(x)objective(x,laser_points,camera_points,f,baseLineLength),x0',lb',ub',options);
-
+x
 R = [   x(1) x(2) x(3);
         x(5) x(6) x(7);
         x(9) x(10) x(11)];
@@ -57,22 +57,23 @@ r0 = [x(4); x(8); x(12)];
 %PlotStuff
 %%
 %making the plot for the offset:
-R = R*10; %For better plotting
-x_axis = R*[1;0;0]+r0;
-y_axis = R*[0;1;0]+r0;
-z_axis = R*[0;0;1]+r0;
+%R = R*10; %For better plotting
+x_axis = R*[10;0;0]+r0;
+y_axis = R*[0;10;0]+r0;
+z_axis = R*[0;0;10]+r0;
 
 
 %To test
 figure(1);
-plot3(0,0,0,'o');
-hold on;
-grid on;
-plot3([0 10],[0 0],[0 0],'linewidth',2);
-plot3([0 0],[0 10],[0 0],'linewidth',2);
-plot3([0 0],[0 0],[0 10],'linewidth',2);
-
+% plot3(0,0,0,'o');
 plot3(r0(1,1),r0(2,1),r0(3,1),'x');
+ hold on;
+ grid on;
+% plot3([0 10],[0 0],[0 0],'linewidth',2);
+% plot3([0 0],[0 10],[0 0],'linewidth',2);
+% plot3([0 0],[0 0],[0 10],'linewidth',2);
+
+
 % plot3([0 r11]+r14,[0 r21]+r24,[0 r31]+r34)
 % plot3([0 r12]+r14,[0 r22]+r24,[0 r32]+r34)
 % plot3([0 r13]+r14,[0 r23]+r24,[0 r33]+r34)
