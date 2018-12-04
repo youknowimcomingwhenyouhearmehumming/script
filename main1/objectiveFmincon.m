@@ -1,4 +1,4 @@
-function errors = objective(x,laser_points,camera_points,f,baseLineLength)
+function errors = objectiveFmincon(x,laser_points,camera_points,f,baseLineLength)
 %OBJECTIVE Summary of this function goes here
 %   Detailed explanation goes here
 %
@@ -80,15 +80,7 @@ errors(13) = (r11*xl5+r12*yl5+r13*f+r14*f/zl5 - xr5*zr5/zl5)^2;
 errors(14) = (r21*xl5+r22*yl5+r23*f+r24*f/zl5 - yr5*zr5/zl5)^2;
 errors(15) = (r31*xl5+r32*yl5+r33*f+r34*f/zl5 - f*zr5/zl5)^2;
 
-errors(16) =  (dot([r14;r24;r34],[r14;r24;r34])-baseLineLength^2)^2*orthonormalityWeight;
-
-errors(17) =  ((r11^2+r12^2+r13^2 - 1))^2*orthonormalityWeight;
-errors(18) =  ((r21^2+r22^2+r23^2 - 1))^2*orthonormalityWeight;
-errors(19) =  ((r31^2+r32^2+r33^2 - 1))^2*orthonormalityWeight;
-
-errors(20) =  ((r11*r21+r12*r22+r13*r23)*1)^2*orthonormalityWeight;
-errors(21) =  ((r21*r31+r22*r32+r23*r33)*1)^2*orthonormalityWeight;
-errors(22) =  ((r11*r31+r12*r32+r13*r33)*1)^2*orthonormalityWeight;
 errors'
+errors = sum(errors);
 end
 

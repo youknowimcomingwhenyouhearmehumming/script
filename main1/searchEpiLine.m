@@ -37,7 +37,7 @@ for i = 1:imgW
     end
 end
 
-if maxVal<20
+if maxVal<10
             posX = 0;
             posY = 0;
 end

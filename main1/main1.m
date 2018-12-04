@@ -51,7 +51,7 @@ angles = [Theta(1:5,:) Phi(1:5,:)];
 
 %starting values.
 %x = [r11,  r12,    r13,    r14,    r21,    r22,    r23,    r24,    r31,    r32,    r33,    r34,    zl1,    zl2,    zl3,    zl4,    zl5,    zr1,    zr2,    zr3,    zr4,    zr5]
-x0 = [1     0       0       -250    0       1       0       0       0       0       1       0       -1300    -1300    -1300    -900   -1300    -1300    -1300    -1300    -900    -1300];
+x0 = [1     0       0       -250    0       1       0       0       0       0       1       0       -1350    -1350    -1300    -900   -1350    -1350    -1350    -1300    -900    -1300];
 pix_W = 2.2*10^-3;
 pix_H = 2.2*10^-3;
 f = (cameraParams.IntrinsicMatrix(1,1)*pix_W + cameraParams.IntrinsicMatrix(2,2)*pix_H)/2; %the mean of the calculatet f from y and x magnification
@@ -72,7 +72,7 @@ img_7 = undistortImage(imread('images_and_data_dec03\b07.tif'),cameraParams);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%Get angles
 Theta_measured;
 Phi_measured;
-searchLineWidtPixels = 5;
+searchLineWidtPixels = 10;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%Find the dot
 [posX1,posY1] = searchEpiLine(img_1(:,:,1),imgW,imgH,Theta_measured(1),Phi_measured(1),R,r0,f,searchLineWidtPixels,pix_W,pix_H);
@@ -83,8 +83,8 @@ searchLineWidtPixels = 5;
 [posX7,posY7] = searchEpiLine(img_7(:,:,1),imgW,imgH,Theta_measured(7),Phi_measured(7),R,r0,f,searchLineWidtPixels,pix_W,pix_H);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%Cut out the dot
-Wsub = 20;
-Hsub = 20;
+Wsub = 10;
+Hsub = 10;
 [subMatrix1, offsetH1, offsetW1] = subMatrix(img_1(:,:,1),posX1,posY1,Wsub,Hsub);
 [subMatrix3, offsetH3, offsetW3] = subMatrix(img_3(:,:,1),posX3,posY3,Wsub,Hsub);
 [subMatrix4, offsetH4, offsetW4] = subMatrix(img_4(:,:,1),posX4,posY4,Wsub,Hsub);
@@ -152,16 +152,16 @@ ymes5 = Y_measured(5)
 zmes5 = Z_measured(5)
 xmes5 = X_measured(5)
 
-pitchCam_rad = -atan(ymid5_mm/f)+atan(ymes5/zmes5)
-yawCam_rad = -atan(xmid5_mm/f)+atan(xmes5/zmes5)
+pitchCam_rad = -atan(ymid5_mm/f)+atan(ymes5/zmes5);
+yawCam_rad = -atan(xmid5_mm/f)+atan(xmes5/zmes5);
 
-v = pitchCam_rad
-R_camoff = [1 0 0; 0 cos(v) sin(v); 0 -sin(v) cos(v)]
-v = yawCam_rad
-R_camoff = R_camoff * [cos(v) 0 sin(v); 0 1 0; -sin(v) 0 cos(v)]
+v = pitchCam_rad;
+R_camoff = [1 0 0; 0 cos(v) sin(v); 0 -sin(v) cos(v)];
+v = yawCam_rad;
+R_camoff = R_camoff * [cos(v) 0 sin(v); 0 1 0; -sin(v) 0 cos(v)];
 
 
-newP = R_camoff*[X([1 3 4 5 6 7])'; Y([1 3 4 5 6 7])'; Z([1 3 4 5 6 7])']
+newP = R_camoff*[X([1 3 4 5 6 7])'; Y([1 3 4 5 6 7])'; Z([1 3 4 5 6 7])'];
 figure(3)
 %plot3(X_measured-X_measured(1),Y_measured-Y_measured(1),Z_measured-Z_measured(1),'x')
 plot3(X_measured,Y_measured,Z_measured,'x')
