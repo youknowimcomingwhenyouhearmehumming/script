@@ -29,7 +29,7 @@ subMatrixH = 10;
 [midOfMass_H4,midOfMass_W4] = midOfMass_gauss(subMatrix4,offsetW4,offsetH4);
 [midOfMass_H5,midOfMass_W5] = midOfMass_gauss(subMatrix5,offsetW5,offsetH5);
 
-laser_points(:,1) = -tan((90-angles(:,1))*pi/180)*f;
+laser_points(:,1) = tan((angles(:,1)-90)*pi/180)*f;
 laser_points(:,2) = -tan((angles(:,2))*pi/180)*f;
 
 camera_points = [   midOfMass_W1 midOfMass_H1;
@@ -119,10 +119,6 @@ plot3([r0(1) lasX(2)],[r0(2) lasY(2)],[r0(3) lasZ(2)],'color','m')
 plot3([r0(1) lasX(3)],[r0(2) lasY(3)],[r0(3) lasZ(3)],'color','c')
 plot3([r0(1) lasX(4)],[r0(2) lasY(4)],[r0(3) lasZ(4)],'color','r')
 plot3([r0(1) lasX(5)],[r0(2) lasY(5)],[r0(3) lasZ(5)],'color','g')
-
-
-
-
 
 end
 

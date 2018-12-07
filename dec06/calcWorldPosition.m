@@ -10,6 +10,7 @@ function [X,Y,Z,xr,yr,xl,yl] = calcWorldPosition(Theta,Phi,xrr,yrr,f,R,r0)
 xr = -xrr;                       %Not 100p shure about the minuses
 yr = yrr;                       
 
+
 xl = tan((Theta-90)*pi/180)*f; 
 yl = -tan(Phi*pi/180)*f;
 

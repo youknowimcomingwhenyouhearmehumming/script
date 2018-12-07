@@ -2,11 +2,15 @@ function [posX,posY] = searchEpiLine(imageData,imgW,imgH,Theta,Phi,R,r0,f,search
 %SEARCHEPILINE Summary of this function goes here
 %   Detailed explanation goes here
 %searchLineWidhtPixels are applied over and under the line
-Theta=-(Theta)*pi/180;
-Phi=(Phi+90)*pi/180;
 
-x_lm = f/tan(Theta);
-y_lm = f/tan(Phi);
+% Theta=-(Theta)*pi/180;
+% Phi=(Phi+90)*pi/180;
+
+% x_lm = f/tan(Theta);
+% y_lm = f/tan(Phi);
+
+x_lm = tan((Theta-90)*pi/180)*f; 
+y_lm = -tan(Phi*pi/180)*f;
 
 a1 = R(1,1)*x_lm + R(1,2)*y_lm+R(1,3)*f;
 a2 = R(2,1)*x_lm + R(2,2)*y_lm+R(2,3)*f;
