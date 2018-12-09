@@ -47,7 +47,7 @@ angles = [Theta Phi];
 
 %starting values.
 %x = [r11,  r12,    r13,    r14,    r21,    r22,    r23,    r24,    r31,    r32,    r33,    r34,    zl1,    zl2,    zl3,    zl4,    zl5,    zr1,    zr2,    zr3,    zr4,    zr5]
-x0 = [1     0       0       -250    0       1       0       0       0       0       1       0       -1000    -1000    -1000    -1000   -1000    -1000    -100    -1000    -1000    -1000];
+x0 = [1     0       0       -250    0       1       0       0       0       0       1       0       -1000    -1000    -1000    -1000   -1000    -1000    -1000    -1000    -1000    -1000];
 
 %x = [r11,     r12,    r13,    r14,    r21,       r22,      r23,    r24,    r31,    r32,    r33,        r34,    zl1,    zl2,    zl3,    zl4,    zl5,    zr1,    zr2,    zr3,    zr4,    zr5]
 lb = [1-0.5   -0.5     -0.5     -260    -0.5     1-0.5     -0.5     -50    -0.5     -0.5     1-0.5     -100    -1400  -1400   -1400   -1400   -1400   -1400   -1400   -1400   -1400   -1400];
@@ -60,7 +60,19 @@ pix_H = 2.2*10^-3;
 
 f = (cameraParams.IntrinsicMatrix(1,1)*pix_W + cameraParams.IntrinsicMatrix(2,2)*pix_H)/2; %the mean of the calculatet f from y and x magnification
 
-[R,r0] = extrinsicCalibration(images,angles,x0,f,baseLineLength,pix_W,pix_H,lb,ub);
+b0_theta = 70.8;
+stepsize = 0.5;
+for i = 0:10
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%Get angles
+    Theta = b0_theta+i*stepsize;
+    Phi = 0;
+    angles = [angles; Theta Phi];
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%Get images
+    img_name = ['3d_straight_object\b' num2str(Theta) '.tif'];
+    img_1 = undistortImage(imread(img_name),cameraParams);
+    images{6+i,1} = img_1;
+end
+[R,r0] = extrinsicCalibrationNolimit(images,angles,x0,f,baseLineLength,pix_W,pix_H,lb,ub);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
