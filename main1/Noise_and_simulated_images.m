@@ -128,28 +128,6 @@ for i = 1:size(simulated_pic_noise_and_laser,3)
 end 
 
 
-%The next part is just a test of the simulated images which shows that they
-%are equal!!!
-% for i = 1:10
-%     for j=1:Wsub+1
-%         for k=1:Hsub+1
-%             
-%             simulated_pic_noise(k,j)=c
-% 
-%         end
-%     end
-%     %The next line is just for setting the pictures togehter as one data
-%     %structure
-%     if i==1
-%         simulated_pic_noise_all=simulated_pic_noise;
-%     end
-%     if i>1
-%     simulated_pic_noise_all=cat(3,simulated_pic_noise_all,simulated_pic_noise);
-%     end     
-% end
-% show_image_nicely(simulated_pic_noise_all(:,:,1));
-% show_image_nicely(simulated_pic_noise_all(:,:,2));
-
 
 %% 
 %-----------------------Poission simulated-------------------------------
