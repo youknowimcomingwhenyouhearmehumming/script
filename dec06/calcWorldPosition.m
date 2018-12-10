@@ -7,7 +7,7 @@ function [X,Y,Z,xr,yr,xl,yl] = calcWorldPosition(Theta,Phi,xrr,yrr,f,R,r0)
 %
 %How to apply R and r0: 
 %solved from book page 311
-xr = -xrr;                       %Not 100p shure about the minuses
+xr = -xrr;                      
 yr = yrr;                       
 
 
