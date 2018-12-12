@@ -33,9 +33,9 @@ end
 %options = optimoptions(@fmincon,'OptimalityTolerance',10^-10,'StepTolerance',10^-12,'FunctionTolerance',10^-10,'MaxFunctionEvaluations',50000,'MaxIterations',10000);
 %x = fmincon(@(x)objectiveFmincon(x,laser_points,camera_points,f,baseLineLength),x0',[],[],[],[],lb',ub',@(x)nonlcon(x,baseLineLength),options);
 
-x0 = [x0 x0(end)*ones(1,(N-10)*2)];
-lb = [lb lb(end)*ones(1,(N-10)*2)];
-ub = [ub ub(end)*ones(1,(N-10)*2)];
+x0 = [x0 x0(end)*ones(1,(N-5)*2)];
+lb = [lb lb(end)*ones(1,(N-5)*2)];
+ub = [ub ub(end)*ones(1,(N-5)*2)];
 
 options = optimoptions(@lsqnonlin,'OptimalityTolerance',10^-10,'StepTolerance',10^-12,'FunctionTolerance',10^-10,'MaxFunctionEvaluations',50000,'MaxIterations',10000);
 x0 = lsqnonlin(@(x)objectiveNoLimit(x,laser_points,camera_points,f,baseLineLength),x0',lb',ub',options);

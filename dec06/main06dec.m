@@ -27,12 +27,14 @@ image1 = imread('kalibrering_6_dec0.tif');
 image2 = imread('kalibrering_6_dec1.tif');
 image3 = imread('kalibrering_6_dec2.tif');
 image4 = imread('kalibrering_6_dec3.tif');
-image5 = imread('kalibrering_6_dec5.tif');
+%image5 = imread('kalibrering_6_dec5.tif');
+image5 = imread('b92.3.tif');
 
 theta0 = -80.8;
-Theta = [-9.5; -9.5; 10; 10; 9.2]-theta0;
+Theta = [-9.5; -9.5; 10; 10; 11.5]-theta0;
 %Phi = [0; 0; 0; 0; 180/pi*atan(-167/(35*25))];
-Phi = [0; 0; 0; 0; 180/pi*atan(-163/(35*25))];
+%Phi = [0; 0; 0; 0; 180/pi*atan(-162/(35*25))];
+Phi = [0; 0; 0; 0; 0];
 
 baseLineLength = 250;
 
@@ -62,15 +64,23 @@ f = (cameraParams.IntrinsicMatrix(1,1)*pix_W + cameraParams.IntrinsicMatrix(2,2)
 
 b0_theta = 70.8;
 stepsize = 0.5;
-for i = 0:10
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%Get angles
-    Theta = b0_theta+i*stepsize;
+skip = 0;
+for i = 0:20%Go througt exstra 25 of the images and add them to the calibration
+    try
+        Theta = b0_theta+i*stepsize;
+        img_name = ['3d_straight_object\b' num2str(Theta) '.tif'];
+        img_1 = undistortImage(imread(img_name),cameraParams);
+    catch
+        skip = 1;
+    end
+    if skip ~= 1
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%Get angles 
     Phi = 0;
     angles = [angles; Theta Phi];
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%Get images
-    img_name = ['3d_straight_object\b' num2str(Theta) '.tif'];
-    img_1 = undistortImage(imread(img_name),cameraParams);
-    images{6+i,1} = img_1;
+    images{length(images)+1,1} = img_1;
+    end
+    skip = 0;
 end
 [R,r0] = extrinsicCalibrationNolimit(images,angles,x0,f,baseLineLength,pix_W,pix_H,lb,ub);
 
@@ -90,14 +100,20 @@ for i = 0:47
 Theta = b0_theta+i*stepsize;
 Phi = 0;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%Get images
+try
 img_name = ['3d_straight_object\b' num2str(Theta) '.tif'];
 img_1 = undistortImage(imread(img_name),cameraParams);
+catch
+    skip = 1;
+end
+if skip ~= 1
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%Find the dot
 searchLineWidtPixels = 20;
 [posX1,posY1] = searchEpiLine(img_1(:,:,1),imgW,imgH,Theta,Phi,R,r0,f,searchLineWidtPixels,pix_W,pix_H);
 if posX1 <= 10 || posY1 <= 10
-    break
+    break;
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%Cut out the dot
@@ -116,6 +132,8 @@ ymid1_mm = (ymid_1-imgH/2)*pix_H;
 X(i+1) = x;
 Y(i+1) = y;
 Z(i+1) = z;
+end
+skip = 0;
 
 % hold on
 % plot(xr,yr,'x','color','r')
@@ -131,7 +149,7 @@ plot3(X,Y,Z,'o')
 xlabel('X')
 ylabel('Y')
 zlabel('Z')
-axis([-500 500 -500 500 -1500 -500])
+%axis([-500 500 -500 500 -1500 -500])
 grid on
 
 

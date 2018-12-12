@@ -27,7 +27,7 @@ r33 = x(1,11);
 r34 = x(1,12);
 
 %%
-N = size(laser_points,1)
+N = size(laser_points,1);
 zl = zeros(N,1);
 zr = zeros(N,1);
 xl = zeros(N,1);
