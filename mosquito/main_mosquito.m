@@ -77,10 +77,13 @@ close all;
 % end
 % [R,r0] = extrinsicCalibrationNolimit(images,angles,x0,f,baseLineLength,pix_W,pix_H,lb,ub);
 
+R=
+ro=
+
 % xxx spørg rasmus om han mener denne implementering er ok for næste to
 % linjer
-rod_name_of_files='3d_straight_object\a'
-[X1,Y1,Z1] = full_scan_function(R,r0,rod_name_of_files)
+rod_name_of_files='3d_straight_object\a';
+[X1,Y1,Z1] = full_scan_function(R,r0,rod_name_of_files);
 
 figure(2)
 plot3(X1,Y1,Z1,'o')
