@@ -11,10 +11,10 @@ Angel_between_phi_dots=5;
 number_of_dots_in_fane=5;
 
 i = 0;
-X = zeros(number_of_pictures:1)
-Y = zeros(number_of_pictures:1)
-Z = zeros(number_of_pictures:1)
-thetam1 = 0;
+X = zeros(number_of_pictures,number_of_dots_in_fane)
+Y = zeros(number_of_pictures,number_of_dots_in_fane)
+Z = zeros(number_of_pictures,number_of_dots_in_fane)
+
 figure(6)
 for i = 0:number_of_pictures
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%Get angles
@@ -51,7 +51,7 @@ ymid1_mm = (ymid_1-imgH/2)*pix_H;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%Find world coordinate
 
 
-[x,y,z,xr,yr,xl,yl] = calcWorldPosition(Theta,Phi,xmid1_mm,ymid1_mm,f,R,r0);
+[x,y,z] = calcWorldPosition(Theta,Phi,xmid1_mm,ymid1_mm,f,R,r0);
 X(i+1) = x;
 Y(i+1) = y;
 Z(i+1) = z;
