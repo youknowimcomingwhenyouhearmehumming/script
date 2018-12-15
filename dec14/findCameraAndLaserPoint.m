@@ -18,7 +18,7 @@ try
     camera_point_x = -(midOfMass_W1-imgW/2)*pix_W;
     camera_point_y = (midOfMass_H1-imgH/2)*pix_H;
     
-    figure
+    pause(0.5)
     imshow(image)
     hold on
     plot(midOfMass_W1,midOfMass_H1,'x')

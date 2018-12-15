@@ -41,11 +41,10 @@ for i = 1:imgW
     end
 end
 
-if maxVal<50
+if maxVal<10
             posX = NaN;
             posY = NaN;
 end
-
 
 end
 
