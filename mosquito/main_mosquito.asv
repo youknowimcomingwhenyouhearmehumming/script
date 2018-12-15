@@ -130,11 +130,12 @@ end
 
 rod_name_of_files='3d_straight_object\b'; 
 [X3,Y3,Z3] = full_scan_function(R,r0,rod_name_of_files);
+counter=1;
 for i=1:max(size(X2),size(X3))
     try %xxx rasmus hvordan implementeres try funktionen?
     if((X3(i) <= X2(i)-safety_distance) && (X3(i) >= X2(i)+safety_distance))
         if((Y3(i) <= Y2(i)-safety_distance) && (Y3(i) >= Y2(i)+safety_distance))
-            if((Z3(i) <= Z2(i)-safety_distance) && (Z3(i) >= Z(i)2+safety_distance))
+            if((Z3(i) <= Z2(i)-safety_distance) && (Z3(i) >= Z2(i)+safety_distance))
                 Taget_2_X(counter));
                 Taget_2_Y(counter);
                 Taget_2_Z(counter);
