@@ -9,8 +9,11 @@ b = imread('Filtter billeder\Laser_off_Light_on_650mn_on_nd_off_set1_thor.jpg');
 c = imread('Filtter billeder\Laser_on_Light_off_650mn_on_nd_0.4set1_thor.jpg');
 d = imread('Filtter billeder\Laser_on_Light_on_650mn_on_nd_0.4set1_thor.jpg');
 e = imread('Filtter billeder\Laser_on_Light_on_650mn_on_nd_off_set1_thor.jpg');
-original=d;
-background=a;
+% original=d;
+% background=a;
+
+original=imread('High_res_Laser_on_Light_on_650mn_on_nd_0.4.tif');
+background=original; 
 
 figure(1)
 imshow(original);
@@ -25,36 +28,34 @@ saveas(figure(2),'red.png')
 
 [location_of_dot_y, location_of_dot_x] = locationDot_R_channel(red)
 
-Wsub = 30;
-Hsub = 20;
-[submatrix_red,offsetH_r,offsetW_r] = subMatrix(red,location_of_dot_y,location_of_dot_x,Wsub,Hsub)
+Wsub = 60;
+Hsub = 60;
+[submatrix_red,offsetH_r,offsetW_r] = subMatrix(red,location_of_dot_y(1),location_of_dot_x(1),Wsub,Hsub)
 figure(3)
 imshow(submatrix_red);
 saveas(figure(3),'submatrix_red.png')
 
 
-[submatrix_background_red,offsetH_b,offsetW_b] = subMatrix(background(:,:,1),location_of_dot_y,location_of_dot_x,Wsub,Hsub)
+[submatrix_background_red,offsetH_b,offsetW_b] = subMatrix(background(:,:,1),900,1000,Wsub,Hsub)
 
 figure(4)
 hist_submatrix_background_red=histogram(submatrix_background_red)
 xlabel('Intensity') 
 ylabel('Counter') 
-title('Histogram for background noise submatrix 21x31 area') 
-saveas(figure(4),'Histogram for background noise submatrix 21x31 area.png')
+title('Histogram for background noise submatrix 60x60 area') 
+saveas(figure(4),'Histogram for background noise submatrix 60x60 area.png')
 
 
 figure(5)
 hist_submatrix_red=histogram(submatrix_red)
 xlabel('Intensity') 
 ylabel('Counter') 
-title('Histogram for laser submatrix 21x31 area') 
-saveas(figure(5),'Histogram for laser submatrix 21x31 area.png')
+title('Histogram for laser submatrix 60x60 area') 
+saveas(figure(5),'Histogram for laser submatrix 60x60 area.png')
 
 
 
 %The next part is to estimates the noise
-a = imread('Filtter billeder\Laser_off_Light_on_650mn_on_nd_0.4_set1_thor.jpg');
-background=a;
 figure(6);
 hist_background_red=histogram(background(:,:,1));
 xlabel('Intensity'); 
@@ -108,7 +109,7 @@ saveas(figure(8),'Gauss.png')
  
 simulated_pic_noise=[];
 simulated_laser_dot_gauss=[];
-for i = 1:1000
+for i = 1:10
     i
     for j=1:Wsub+1
         for k=1:Hsub+1
@@ -190,11 +191,11 @@ saveas(figure(13),'Variation in y.png')
 %-----------------------Poission simulated-------------------------------
 number_of_simulated_images_Poisson=10;
 lambdahat = poissfit(submatrix_background_red(:)); %If hsv *1000000;
-simulated_images_Poisson=poissrnd(lambdahat, [size(original,1),size(original,2)]);
-% for i = 1:number_of_simulated_images_Poisson-1
-%         i
-%        simulated_images_Poisson=cat(3,simulated_images_Poisson,poissrnd(lambdahat, [Hsub+1,Wsub+1])); %if hsv ./1000000)
-% end
+simulated_images_Poisson=poissrnd(lambdahat, [Hsub+1,Wsub+1]);
+for i = 1:number_of_simulated_images_Poisson-1
+        i
+       simulated_images_Poisson=cat(3,simulated_images_Poisson,poissrnd(lambdahat, [Hsub+1,Wsub+1])); %if hsv ./1000000)
+end
 save simulated_images_Poisson.mat simulated_images_Poisson
 % temperary_name3=load('C:\Users\Bruger\Documents\Uni\Image analysis\Projekt\data_fra_simuleringer\simulated_images_Poisson.mat', 'simulated_images_Poisson');
 % simulated_images_Poisson=temperary_name3.simulated_images_Poisson(:,:,:);
