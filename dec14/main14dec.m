@@ -20,21 +20,24 @@ load('cameraParams.mat') % We use the cameraParams found ealier, hopefully noone
 imgH = cameraParams.ImageSize(1);
 imgW = cameraParams.ImageSize(2);
 
-addpath('Calibration');
-addpath('3d_straight_object');
+addpath('hånd');
+addpath('flade');
 
-image1 = imread('kalibrering_6_dec0.tif');
-image2 = imread('kalibrering_6_dec1.tif');
-image3 = imread('kalibrering_6_dec2.tif');
-image4 = imread('kalibrering_6_dec3.tif');
-%image5 = imread('kalibrering_6_dec5.tif');
-image5 = imread('b92.3.tif');
+%Read some images with laser dots in different positions
+%Each image have a dot in Phi=0 and then 7 dots over and 7 under = 15 dots
+image1 = imread('img_dec14_84.4535.tif');
+image2 = imread('img_dec14_89.6175.tif');
+image3 = imread('img_dec14_85.0273.tif');
+image4 = imread('img_dec14_79.8632.tif');
+image5 = imread('img_dec14_81.489.tif');
 
-theta0 = -80.8;
-Theta = [-9.5; -9.5; 10; 10; 11.5]-theta0;
-%Phi = [0; 0; 0; 0; 180/pi*atan(-167/(35*25))];
-%Phi = [0; 0; 0; 0; 180/pi*atan(-162/(35*25))];
-Phi = [0; 0; 0; 0; 0];
+%Get the angles
+theta = [repmat(84.4535,1,15) repmat(89.6175,1,15) repmat(85.0273,1,15) repmat(79.8632,1,15) repmat(81.489,1,15)]';
+
+phi_between_dots = 13.5/19;
+phi_pr_image = [0:phi_between_dots:phi_between_dots*14]-phi_between_dots*7;
+
+phi = [phi_pr_image phi_pr_image phi_pr_image phi_pr_image phi_pr_image]';
 
 baseLineLength = 250;
 
@@ -44,45 +47,24 @@ image3 = undistortImage(image3,cameraParams);
 image4 = undistortImage(image4,cameraParams);
 image5 = undistortImage(image5,cameraParams);
 
-images = {image1;image2;image3;image4;image5};
-angles = [Theta Phi];
+images = {image1; image2; image3; image4; image5};
+angles = [theta phi];
 
 %starting values.
 %x = [r11,  r12,    r13,    r14,    r21,    r22,    r23,    r24,    r31,    r32,    r33,    r34,    zl1,    zl2,    zl3,    zl4,    zl5,    zr1,    zr2,    zr3,    zr4,    zr5]
 x0 = [1     0       0       -250    0       1       0       0       0       0       1       0       -1000    -1000    -1000    -1000   -1000    -1000    -1000    -1000    -1000    -1000];
 
 %x = [r11,     r12,    r13,    r14,    r21,       r22,      r23,    r24,    r31,    r32,    r33,        r34,    zl1,    zl2,    zl3,    zl4,    zl5,    zr1,    zr2,    zr3,    zr4,    zr5]
-lb = [1-0.5   -0.5     -0.5     -260    -0.5     1-0.5     -0.5     -50    -0.5     -0.5     1-0.5     -100    -1400  -1400   -1400   -1400   -1400   -1400   -1400   -1400   -1400   -1400];
-ub = [1+0.5   0.5      0.5      -240    0.5      1+0.5     0.5      50     0.5      0.5      1+0.5     100     -500    -500    -500    -500    -500   -500    -500    -500    -500    -500];
+lb = [1-0.5   -0.5     -0.5     -300    -0.5     1-0.5     -0.5     -50    -0.5     -0.5     1-0.5     -100    -1400  -1400   -1400   -1400   -1400   -1400   -1400   -1400   -1400   -1400];
+ub = [1+0.5   0.5      0.5      -150    0.5      1+0.5     0.5      50     0.5      0.5      1+0.5     100     -500    -500    -500    -500    -500   -500    -500    -500    -500    -500];
 
 
 pix_W = 2.2*10^-3;
 pix_H = 2.2*10^-3;
 
-
 f = (cameraParams.IntrinsicMatrix(1,1)*pix_W + cameraParams.IntrinsicMatrix(2,2)*pix_H)/2; %the mean of the calculatet f from y and x magnification
 
-b0_theta = 70.8;
-stepsize = 0.5;
-skip = 0;
-for i = 0:20%Go througt exstra 25 of the images and add them to the calibration
-    try
-        Theta = b0_theta+i*stepsize;
-        img_name = ['3d_straight_object\b' num2str(Theta) '.tif'];
-        img_1 = undistortImage(imread(img_name),cameraParams);
-    catch
-        skip = 1;
-    end
-    if skip ~= 1
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%Get angles 
-    Phi = 0;
-    angles = [angles; Theta Phi];
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%Get images
-    images{length(images)+1,1} = img_1;
-    end
-    skip = 0;
-end
-[R,r0] = extrinsicCalibrationNolimit(images,angles,x0,f,baseLineLength,pix_W,pix_H,lb,ub);
+[R,r0] = extrinsicCalibrationNolimitMoreDots(images,angles,x0,f,baseLineLength,pix_W,pix_H,lb,ub,imgW,imgH);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%

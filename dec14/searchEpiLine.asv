@@ -42,8 +42,8 @@ for i = 1:imgW
 end
 
 if maxVal<50
-            posX = NaN;
-            posY = NaN;
+            posX = -1;
+            posY = 0;
 end
 
 

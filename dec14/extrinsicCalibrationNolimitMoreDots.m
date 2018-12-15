@@ -1,4 +1,4 @@
-function [R,r0] = extrinsicCalibrationNolimit(images,angles,x0,f,baseLineLength,pix_W,pix_H,lb,ub)
+function [R,r0] = extrinsicCalibrationNolimit(images,angles,x0,f,baseLineLength,pix_W,pix_H,lb,ub,imgW,imgH)
 %EXTRINSICCALIBRATION Summary of this function goes here
 %   Detailed explanation goes here
 %baseline length is positive.
@@ -6,27 +6,21 @@ Rguess = eye(3);
 r0guess = [-baseLineLength;0;0];
 imgH = size(images{1},1);
 imgW = size(images{1},2);
-searchLineWidtPixels = imgH/2;%passing Phi = 0 and imgW/2 ensures the entire picture is searched by searchEpiLine
 
-N = size(angles,1);
-laser_points = zeros(N,2);
-camera_points = zeros(N,2);
-for i = 1:N
-[posX1,posY1] = searchEpiLine(images{i}(:,:,1),imgW,imgH,angles(1,1),0,Rguess,r0guess,f,searchLineWidtPixels,pix_W,pix_H);
-
-subMatrixW = 10;
-subMatrixH = 10;
-
-[subMatrix1, offsetH1, offsetW1] = subMatrix(images{i}(:,:,1),posX1,posY1,subMatrixW,subMatrixH);
-
-[midOfMass_H1,midOfMass_W1] = midOfMass_gauss(subMatrix1,offsetW1,offsetH1);
-
-laser_points(i,1) = tan((angles(i,1)-90)*pi/180)*f;
-laser_points(i,2) = -tan((angles(i,2))*pi/180)*f;
-
-camera_points(i,1) = -(midOfMass_W1-imgW/2)*pix_W;
-camera_points(i,2) = (midOfMass_H1-imgH/2)*pix_H;
-
+N = 0;
+laser_points = [];
+camera_points = [];
+for i = 1:length(images)
+    for j = 1:15%15dots per image
+        [camera_point_x,camera_point_y,laser_point_x,laser_point_y] = findCameraAndLaserPoint(images{i}(:,:,1),angles(i*j,1),angles(i*j,2),Rguess,r0guess,f,pix_W,pix_H,imgW,imgH);
+        if isnan(camera_point_x)
+            %dont use this point
+        else
+            N = N+1;
+            camera_points = [camera_points; camera_point_x camera_point_y];
+            laser_points = [laser_points; laser_point_x laser_point_y];
+        end
+    end
 end
 
 %nonlcon = @UnlConFun;
