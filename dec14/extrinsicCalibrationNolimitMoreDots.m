@@ -10,8 +10,11 @@ imgW = size(images{1},2);
 N = 0;
 laser_points = [];
 camera_points = [];
+
+figure(1)
+
 for i = 1:length(images)
-    for j = 1:15%15dots per image
+    for j = 1:5%15dots per image
         [camera_point_x,camera_point_y,laser_point_x,laser_point_y] = findCameraAndLaserPoint(images{i}(:,:,1),angles(i*j,1),angles(i*j,2),Rguess,r0guess,f,pix_W,pix_H,imgW,imgH);
         if isnan(camera_point_x)
             %dont use this point

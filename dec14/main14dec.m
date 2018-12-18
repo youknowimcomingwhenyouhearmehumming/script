@@ -32,10 +32,10 @@ image4 = imread('img_dec14_79.8632.tif');
 image5 = imread('img_dec14_81.489.tif');
 
 %Get the angles
-theta = [repmat(84.4535,1,15) repmat(89.6175,1,15) repmat(85.0273,1,15) repmat(79.8632,1,15) repmat(81.489,1,15)]';
+theta = [repmat(84.4535,1,5) repmat(89.6175,1,5) repmat(85.0273,1,5) repmat(79.8632,1,5) repmat(81.489,1,5)]';
 
-phi_between_dots = 13.5/19;
-phi_pr_image = [0:phi_between_dots:phi_between_dots*14]-phi_between_dots*7;
+phi_between_dots = 13.3/19;
+phi_pr_image = [0:phi_between_dots:phi_between_dots*4]-phi_between_dots*7;
 
 phi = [phi_pr_image phi_pr_image phi_pr_image phi_pr_image phi_pr_image]';
 
@@ -55,8 +55,8 @@ angles = [theta phi];
 x0 = [1     0       0       -250    0       1       0       0       0       0       1       0       -1000    -1000    -1000    -1000   -1000    -1000    -1000    -1000    -1000    -1000];
 
 %x = [r11,     r12,    r13,    r14,    r21,       r22,      r23,    r24,    r31,    r32,    r33,        r34,    zl1,    zl2,    zl3,    zl4,    zl5,    zr1,    zr2,    zr3,    zr4,    zr5]
-lb = [1-0.5   -0.5     -0.5     -300    -0.5     1-0.5     -0.5     -50    -0.5     -0.5     1-0.5     -100    -1400  -1400   -1400   -1400   -1400   -1400   -1400   -1400   -1400   -1400];
-ub = [1+0.5   0.5      0.5      -150    0.5      1+0.5     0.5      50     0.5      0.5      1+0.5     100     -500    -500    -500    -500    -500   -500    -500    -500    -500    -500];
+lb = [1-0.5   -0.5     -0.5     -baseLineLength-10    -0.5     1-0.5     -0.5     -50    -0.5     -0.5     1-0.5     -100    -1400  -1400   -1400   -1400   -1400   -1400   -1400   -1400   -1400   -1400];
+ub = [1+0.5   0.5      0.5      -baseLineLength+10    0.5      1+0.5     0.5      50     0.5      0.5      1+0.5     100     -500    -500    -500    -500    -500   -500    -500    -500    -500    -500];
 
 
 pix_W = 2.2*10^-3;
@@ -69,60 +69,56 @@ f = (cameraParams.IntrinsicMatrix(1,1)*pix_W + cameraParams.IntrinsicMatrix(2,2)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 
-b0_theta = 70.8;
-stepsize = 0.5;
-i = 0;
-X = zeros(47:1)
-Y = zeros(47:1)
-Z = zeros(47:1)
-thetam1 = 0;
-figure(6)
-for i = 0:47
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%Get angles
-Theta = b0_theta+i*stepsize;
-Phi = 0;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Get images
-try
-img_name = ['3d_straight_object\b' num2str(Theta) '.tif'];
-img_1 = undistortImage(imread(img_name),cameraParams);
-catch
-    skip = 1;
-end
-if skip ~= 1
+theta_start = 71.0653;
+stepsize = 0.0956;
+N_images = 199;
+phi_between_dots = 13.3/19;
+phi_pr_image = [0:phi_between_dots:phi_between_dots*14]-phi_between_dots*7;
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%Find the dot
-searchLineWidtPixels = 20;
-[posX1,posY1] = searchEpiLine(img_1(:,:,1),imgW,imgH,Theta,Phi,R,r0,f,searchLineWidtPixels,pix_W,pix_H);
-if posX1 <= 10 || posY1 <= 10
-    break;
-end
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%Cut out the dot
-Wsub = 10;
-Hsub = 10;
-[subMatrix1, offsetH1, offsetW1] = subMatrix(img_1(:,:,1),posX1,posY1,Wsub,Hsub);
-%%%%%%%%%%%%%%%%%%%%%%%%%%%Find mid of the dot
-[ymid_1,xmid_1] = midOfMass_gauss(subMatrix1,offsetW1,offsetH1);
-%Convert from pixel value to mm and move origo to middle
-xmid1_mm = (xmid_1-imgW/2)*pix_W;
-ymid1_mm = (ymid_1-imgH/2)*pix_H;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%Find world coordinate
-
-
-[x,y,z,xr,yr,xl,yl] = calcWorldPosition(Theta,Phi,xmid1_mm,ymid1_mm,f,R,r0);
-X(i+1) = x;
-Y(i+1) = y;
-Z(i+1) = z;
-end
+X = zeros(N_images*15,1)
+Y = zeros(N_images*15,1)
+Z = zeros(N_images*15,1)
 skip = 0;
-
-% hold on
-% plot(xr,yr,'x','color','r')
-% plot(xl,yl,'x','color','b')
-% 
-% xr-thetam1
-% thetam1 = xr;
+for i = 0:N_images-1
+    for j = 1:15
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%Get angles
+        Theta = theta_start+i*stepsize;
+        Phi = phi_between_dots*j-phi_between_dots*8;
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%Get images
+        try
+            img_name = ['img_dec14_' num2str(Theta) '.tif'];
+            img_1 = undistortImage(imread(img_name),cameraParams);
+        catch
+            skip = 1;
+        end
+        if skip ~= 1
+            
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%Find the dot
+            searchLineWidtPixels = 10;
+            [posX1,posY1] = searchEpiLine(img_1(:,:,1),imgW,imgH,Theta,Phi,R,r0,f,searchLineWidtPixels,pix_W,pix_H);
+            if isnan(posX1)
+                break;
+            end
+            
+            %%%%%%%%%%%%%%%%%%%%%%%%%%Cut out the dot
+            Wsub = 10;
+            Hsub = 10;
+            [subMatrix1, offsetH1, offsetW1] = subMatrix(img_1(:,:,1),posX1,posY1,Wsub,Hsub);
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%Find mid of the dot
+            [ymid_1,xmid_1] = midOfMass_gauss(subMatrix1,offsetW1,offsetH1);
+            %Convert from pixel value to mm and move origo to middle
+            xmid1_mm = (xmid_1-imgW/2)*pix_W;
+            ymid1_mm = (ymid_1-imgH/2)*pix_H;
+            
+            
+            [x,y,z,xr,yr,xl,yl] = calcWorldPosition(Theta,Phi,xmid1_mm,ymid1_mm,f,R,r0);
+            X((i+1)*j) = x;
+            Y((i+1)*j) = y;
+            Z((i+1)*j) = z;
+ 
+        end
+        skip = 0;
+    end
 end
 
 
@@ -134,23 +130,23 @@ zlabel('Z')
 %axis([-500 500 -500 500 -1500 -500])
 grid on
 
-
-axx1 = R*[10;0;0]
-axx2 = R*[0;10;0]
-axx3 = R*[0;0;10]
-figure(4)
-plot3([0 10],[0 0],[0 0])
-hold on
-plot3([0 0],[0 10],[0 0])
-plot3([0 0],[0 0],[0 10])
-
-plot3([0 axx1(1)],[0 axx1(2)],[0 axx1(3)])
-plot3([0 axx2(1)],[0 axx2(2)],[0 axx2(3)])
-plot3([0 axx3(1)],[0 axx3(2)],[0 axx3(3)])
-xlabel('X')
-ylabel('Y')
-
-zlabel('Z')
+% 
+% axx1 = R*[10;0;0]
+% axx2 = R*[0;10;0]
+% axx3 = R*[0;0;10]
+% figure(4)
+% plot3([0 10],[0 0],[0 0])
+% hold on
+% plot3([0 0],[0 10],[0 0])
+% plot3([0 0],[0 0],[0 10])
+% 
+% plot3([0 axx1(1)],[0 axx1(2)],[0 axx1(3)])
+% plot3([0 axx2(1)],[0 axx2(2)],[0 axx2(3)])
+% plot3([0 axx3(1)],[0 axx3(2)],[0 axx3(3)])
+% xlabel('X')
+% ylabel('Y')
+% 
+% zlabel('Z')
 
 %%
 ymid5_mm
