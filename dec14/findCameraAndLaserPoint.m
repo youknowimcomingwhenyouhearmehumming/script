@@ -1,8 +1,12 @@
 function [camera_point_x,camera_point_y,laser_point_x,laser_point_y] = findCameraAndLaserPoint(image,Theta,Phi,R,r0,f,pix_W,pix_H,imgW,imgH)
 %FINDCAMERAPOINT Summary of this function goes here
 %   Detailed explanation goes here
+
 try
-    searchLineWidtPixels = 10;
+    imshow(image)
+    hold on
+
+    searchLineWidtPixels = 15;
     [posX1,posY1] = searchEpiLine(image(:,:,1),imgW,imgH,Theta,Phi,R,r0,f,searchLineWidtPixels,pix_W,pix_H);
     
     subMatrixW = 20;
@@ -18,11 +22,11 @@ try
     camera_point_x = -(midOfMass_W1-imgW/2)*pix_W;
     camera_point_y = (midOfMass_H1-imgH/2)*pix_H;
     
-    pause(0.5)
-    imshow(image)
-    hold on
     plot(midOfMass_W1,midOfMass_H1,'x')
+    pause(0.1)
+    
 catch
+    display('Did Not find point')
     laser_point_x=NaN;
     laser_point_y=NaN;
     camera_point_x=NaN;

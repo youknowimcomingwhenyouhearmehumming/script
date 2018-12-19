@@ -20,26 +20,27 @@ load('cameraParams.mat') % We use the cameraParams found ealier, hopefully noone
 imgH = cameraParams.ImageSize(1);
 imgW = cameraParams.ImageSize(2);
 
-addpath('hånd');
+%addpath('hånd');
 addpath('flade');
+addpath('myg og handske');
 
 %Read some images with laser dots in different positions
 %Each image have a dot in Phi=0 and then 7 dots over and 7 under = 15 dots
-image1 = imread('img_dec14_84.4535.tif');
-image2 = imread('img_dec14_89.6175.tif');
-image3 = imread('img_dec14_85.0273.tif');
-image4 = imread('img_dec14_79.8632.tif');
-image5 = imread('img_dec14_81.489.tif');
+image1 = imread('img_dec14_77.7601.tif');
+image2 = imread('img_dec14_88.2601.tif');
+image3 = imread('hånd/img_dec14_86.3661.tif');
+image4 = imread('img_dec14_70.2601.tif');
+image5 = imread('img_dec14_94.2601.tif');
 
 %Get the angles
-theta = [repmat(84.4535,1,5) repmat(89.6175,1,5) repmat(85.0273,1,5) repmat(79.8632,1,5) repmat(81.489,1,5)]';
+theta = [repmat(77.7601,1,14) repmat(88.2601,1,14) repmat(86.3661,1,14) repmat(70.2601,1,14) repmat(94.2601,1,14)]';
 
-phi_between_dots = 13.3/19;
-phi_pr_image = [0:phi_between_dots:phi_between_dots*4]-phi_between_dots*7;
+phi_between_dots = 13.6/19;
+phi_pr_image = [0:phi_between_dots:phi_between_dots*13]-phi_between_dots*7;
 
 phi = [phi_pr_image phi_pr_image phi_pr_image phi_pr_image phi_pr_image]';
 
-baseLineLength = 250;
+baseLineLength = 200;
 
 image1 = undistortImage(image1,cameraParams);
 image2 = undistortImage(image2,cameraParams);
@@ -52,7 +53,7 @@ angles = [theta phi];
 
 %starting values.
 %x = [r11,  r12,    r13,    r14,    r21,    r22,    r23,    r24,    r31,    r32,    r33,    r34,    zl1,    zl2,    zl3,    zl4,    zl5,    zr1,    zr2,    zr3,    zr4,    zr5]
-x0 = [1     0       0       -250    0       1       0       0       0       0       1       0       -1000    -1000    -1000    -1000   -1000    -1000    -1000    -1000    -1000    -1000];
+x0 = [1     0       0       -baseLineLength    0       1       0       0       0       0       1       0       -1000    -1000    -1000    -1000   -1000    -1000    -1000    -1000    -1000    -1000];
 
 %x = [r11,     r12,    r13,    r14,    r21,       r22,      r23,    r24,    r31,    r32,    r33,        r34,    zl1,    zl2,    zl3,    zl4,    zl5,    zr1,    zr2,    zr3,    zr4,    zr5]
 lb = [1-0.5   -0.5     -0.5     -baseLineLength-10    -0.5     1-0.5     -0.5     -50    -0.5     -0.5     1-0.5     -100    -1400  -1400   -1400   -1400   -1400   -1400   -1400   -1400   -1400   -1400];
@@ -69,30 +70,32 @@ f = (cameraParams.IntrinsicMatrix(1,1)*pix_W + cameraParams.IntrinsicMatrix(2,2)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 
-theta_start = 71.0653;
-stepsize = 0.0956;
-N_images = 199;
-phi_between_dots = 13.3/19;
+theta_start = 97.7601;
+stepsize = -0.5;
+N_images = 100;
+%phi_between_dots = 13.3/19;
 phi_pr_image = [0:phi_between_dots:phi_between_dots*14]-phi_between_dots*7;
 
 X = zeros(N_images*15,1)
 Y = zeros(N_images*15,1)
 Z = zeros(N_images*15,1)
 skip = 0;
+
 for i = 0:N_images-1
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%Get angles
+    Theta = theta_start+i*stepsize;
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%Get images
+    try
+        img_name = ['img_dec14_' num2str(Theta) '.tif'];
+        img_1 = undistortImage(imread(img_name),cameraParams);
+    catch
+        display('fail')
+        skip = 1;
+    end
     for j = 1:15
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%Get angles
-        Theta = theta_start+i*stepsize;
         Phi = phi_between_dots*j-phi_between_dots*8;
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%Get images
-        try
-            img_name = ['img_dec14_' num2str(Theta) '.tif'];
-            img_1 = undistortImage(imread(img_name),cameraParams);
-        catch
-            skip = 1;
-        end
+        
         if skip ~= 1
-            
             %%%%%%%%%%%%%%%%%%%%%%%%%%%Find the dot
             searchLineWidtPixels = 10;
             [posX1,posY1] = searchEpiLine(img_1(:,:,1),imgW,imgH,Theta,Phi,R,r0,f,searchLineWidtPixels,pix_W,pix_H);
@@ -101,8 +104,8 @@ for i = 0:N_images-1
             end
             
             %%%%%%%%%%%%%%%%%%%%%%%%%%Cut out the dot
-            Wsub = 10;
-            Hsub = 10;
+            Wsub = 20;
+            Hsub = 20;
             [subMatrix1, offsetH1, offsetW1] = subMatrix(img_1(:,:,1),posX1,posY1,Wsub,Hsub);
             %%%%%%%%%%%%%%%%%%%%%%%%%%%Find mid of the dot
             [ymid_1,xmid_1] = midOfMass_gauss(subMatrix1,offsetW1,offsetH1);
@@ -112,25 +115,25 @@ for i = 0:N_images-1
             
             
             [x,y,z,xr,yr,xl,yl] = calcWorldPosition(Theta,Phi,xmid1_mm,ymid1_mm,f,R,r0);
-            X((i+1)*j) = x;
-            Y((i+1)*j) = y;
-            Z((i+1)*j) = z;
- 
+            X(j+i*15) = x;
+            Y(j+i*15) = y;
+            Z(j+i*15) = z;
+            
         end
-        skip = 0;
     end
+    skip = 0;
 end
 
 
 figure(2)
-plot3(X,Y,Z,'o')
+plot3(X,Y,Z,'.')
 xlabel('X')
 ylabel('Y')
 zlabel('Z')
-%axis([-500 500 -500 500 -1500 -500])
+axis([-500 500 -500 500 -1500 -500])
 grid on
 
-% 
+%
 % axx1 = R*[10;0;0]
 % axx2 = R*[0;10;0]
 % axx3 = R*[0;0;10]
@@ -139,13 +142,13 @@ grid on
 % hold on
 % plot3([0 0],[0 10],[0 0])
 % plot3([0 0],[0 0],[0 10])
-% 
+%
 % plot3([0 axx1(1)],[0 axx1(2)],[0 axx1(3)])
 % plot3([0 axx2(1)],[0 axx2(2)],[0 axx2(3)])
 % plot3([0 axx3(1)],[0 axx3(2)],[0 axx3(3)])
 % xlabel('X')
 % ylabel('Y')
-% 
+%
 % zlabel('Z')
 
 %%
@@ -203,34 +206,34 @@ sqrt((X_measured(4)-X_measured(5))^2+(Y_measured(4)-Y_measured(5))^2+(Z_measured
 %%%---------------------Loop that countinues---------------------
 x=[] %X and y coordinates of the laser. One entry pr. loop
 y=[]
-rms=[] %the valus should be higher than 0.95 otherwise there the picture 
+rms=[] %the valus should be higher than 0.95 otherwise there the picture
 %was too bad to make a gauss fit from
 
 
 
-    %%%---------------------Take an image%pick a camera----------------------
+%%%---------------------Take an image%pick a camera----------------------
 %     pic = snapshot(cam);
-    
+
 %     pic = imread('Laser_on_Light_on_650mn_on_nd_0.4set1_thor.jpg'); %Dette er bare et test billede til at debugge
 %     red=pic(:,:,1);%takes just the red channel of image
 %     figure()
 %     imshow(red);
-    
-    
-    %%%---------------------Get angles of laser----------------------
-    %Theta = input('Enter Theta and press enter: ');
-    %Phi = input('Enter Phi and press enter: ');
-    %searchLineWidtPixels=input('Enter searchLineWidtPixels and press enter: ');
-    
-    
-    
-    
-    %%%---------------------Search Along epipolar lines----------------------
+
+
+%%%---------------------Get angles of laser----------------------
+%Theta = input('Enter Theta and press enter: ');
+%Phi = input('Enter Phi and press enter: ');
+%searchLineWidtPixels=input('Enter searchLineWidtPixels and press enter: ');
+
+
+
+
+%%%---------------------Search Along epipolar lines----------------------
 %   [posX,posY] = searchEpiLine(red,imgW,imgH,Theta,Phi,R,r0,f,searchLineWidtPixels,pix_W,pix_H);
-    %[posX,posY]=locationDot_R_channel(red); %This is just beacuse we don't yet know the phi and theta to use in searchepilines
-    
-    
-    
+%[posX,posY]=locationDot_R_channel(red); %This is just beacuse we don't yet know the phi and theta to use in searchepilines
+
+
+
     
     
     %%%---------------------Cut out point ----------------------
