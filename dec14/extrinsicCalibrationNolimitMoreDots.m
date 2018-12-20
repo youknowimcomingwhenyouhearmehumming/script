@@ -7,8 +7,8 @@ function [R,r0] = extrinsicCalibrationNolimitMoreDots(images,angles,x0,f,baseLin
 Rguess = eye(3);
 r0guess = [-baseLineLength;0;0];
 
-Rguess =[0.991132324709672,0.019536389217657,-0.136240407850152;-0.021133020487294,1.000828204666809,-0.004955525726741;0.137037730404066,0.006941711726181,0.989461540123633];
-r0guess =[-2.999997178044994e+02;-0.014475791364508;0.411513679900684];
+Rguess =[0.984102847214101,0.019926663255275,-0.177816714210680;-0.020986547605442,1.000762382373920,-0.005699166180073;0.176718176479539,0.009637499287744,0.983648387837435];
+r0guess =[-3.499994892708752e+02;-0.174718284034359;0.572094903851522];
 
 imgH = size(images{1},1);
 imgW = size(images{1},2);
@@ -18,6 +18,9 @@ laser_points = [];
 camera_points = [];
 
 for i = 1:length(images)
+    figure(i)
+    imshow(images{i}(:,:,1))
+    hold on
     for j = 1:14%15dots per image
         [camera_point_x,camera_point_y,laser_point_x,laser_point_y] = findCameraAndLaserPoint(images{i}(:,:,1),angles(i*14-14+j,1),angles(i*14-14+j,2),Rguess,r0guess,f,pix_W,pix_H,imgW,imgH);
         if isnan(camera_point_x)
@@ -38,9 +41,8 @@ x0 = [x0 x0(end)*ones(1,(N-5)*2)];
 lb = [lb lb(end)*ones(1,(N-5)*2)];
 ub = [ub ub(end)*ones(1,(N-5)*2)];
 
-options = optimoptions(@lsqnonlin,'OptimalityTolerance',10^-6,'StepTolerance',10^-6,'FunctionTolerance',10^-10,'MaxFunctionEvaluations',50000,'MaxIterations',10000);
-x0 = lsqnonlin(@(x)objectiveNoLimit(x,laser_points,camera_points,f,baseLineLength),x0',lb',ub',options);
-x = lsqnonlin(@(x)objectiveNoLimit(x,laser_points,camera_points,f,baseLineLength),x0,lb',ub',options);
+options = optimoptions(@lsqnonlin,'OptimalityTolerance',10^-6,'StepTolerance',10^-6,'FunctionTolerance',10^-8,'MaxFunctionEvaluations',50000,'MaxIterations',10000);
+x = lsqnonlin(@(x)objectiveNoLimit(x,laser_points,camera_points,f,baseLineLength),x0',lb',ub',options);
 
 x
 R = [   x(1) x(2) x(3);

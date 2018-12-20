@@ -3,8 +3,6 @@ function [camera_point_x,camera_point_y,laser_point_x,laser_point_y] = findCamer
 %   Detailed explanation goes here
 
 try
-    imshow(image)
-    hold on
 
     searchLineWidtPixels = 15;
     [posX1,posY1] = searchEpiLine(image(:,:,1),imgW,imgH,Theta,Phi,R,r0,f,searchLineWidtPixels,pix_W,pix_H);

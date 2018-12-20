@@ -29,18 +29,18 @@ addpath('myg og handske');
 image1 = imread('img_dec14_77.7601.tif');
 image2 = imread('img_dec14_88.2601.tif');
 image3 = imread('hånd/img_dec14_86.3661.tif');
-image4 = imread('img_dec14_70.2601.tif');
+image4 = imread('img_dec14_74.2601.tif');
 image5 = imread('img_dec14_94.2601.tif');
 
 %Get the angles
-theta = [repmat(77.7601,1,14) repmat(88.2601,1,14) repmat(86.3661,1,14) repmat(70.2601,1,14) repmat(94.2601,1,14)]';
+theta = [repmat(77.7601,1,14) repmat(88.2601,1,14) repmat(86.3661,1,14) repmat(74.2601,1,14) repmat(94.2601,1,14)]';
 
-phi_between_dots = 13.6/19;
+phi_between_dots = 13.95/19;
 phi_pr_image = [0:phi_between_dots:phi_between_dots*13]-phi_between_dots*7;
 
 phi = [phi_pr_image phi_pr_image phi_pr_image phi_pr_image phi_pr_image]';
 
-baseLineLength = 200;
+baseLineLength = 250;
 
 image1 = undistortImage(image1,cameraParams);
 image2 = undistortImage(image2,cameraParams);
@@ -76,9 +76,9 @@ N_images = 100;
 %phi_between_dots = 13.3/19;
 phi_pr_image = [0:phi_between_dots:phi_between_dots*14]-phi_between_dots*7;
 
-X = zeros(N_images*15,1)
-Y = zeros(N_images*15,1)
-Z = zeros(N_images*15,1)
+X = zeros(N_images*15,1);
+Y = zeros(N_images*15,1);
+Z = zeros(N_images*15,1);
 skip = 0;
 
 for i = 0:N_images-1
@@ -114,7 +114,7 @@ for i = 0:N_images-1
             ymid1_mm = (ymid_1-imgH/2)*pix_H;
             
             
-            [x,y,z,xr,yr,xl,yl] = calcWorldPosition(Theta,Phi,xmid1_mm,ymid1_mm,f,R,r0);
+            [x,y,z] = calcWorldPosition(Theta,Phi,xmid1_mm,ymid1_mm,f,R,r0);
             X(j+i*15) = x;
             Y(j+i*15) = y;
             Z(j+i*15) = z;
@@ -125,7 +125,7 @@ for i = 0:N_images-1
 end
 
 
-figure(2)
+figure(11)
 plot3(X,Y,Z,'.')
 xlabel('X')
 ylabel('Y')

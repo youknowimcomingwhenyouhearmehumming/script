@@ -3,15 +3,15 @@ clear;
 
 %%
 %Parameters
-Theta = 20;%degfrom x axis toward neg z axis(toward world)
-Phi = 50;%deg from x axis toward y (up)
+Theta = 75;%degfrom x axis toward neg z axis(toward world)
+Phi = -15;%deg from x axis toward y (up)
 Theta=-(Theta)*pi/180;
 Phi=(Phi+90)*pi/180;
 
 R = [1 0 0;
      0 1 0;
      0 0 1];
-r0 = [-10;0;0];
+r0 = [-200;0;-20];
 
 f = 6;
 %%
@@ -23,7 +23,7 @@ a1 = R(1,1)*x_lm + R(1,2)*y_lm+R(1,3)*f;
 a2 = R(2,1)*x_lm + R(2,2)*y_lm+R(2,3)*f;
 a3 = R(3,1)*x_lm + R(3,2)*y_lm+R(3,3)*f;
 
-z_l = [-10 -2 -1 -0.1 0.1 1 2 10]';
+z_l = [-100 -10 -2 -1 -0.1 0.1 1 2 10 100]';
 
 x_cm = f*(a1*z_l+f*r0(1))./(a3*z_l+f*r0(3));
 y_cm = f*(a2*z_l+f*r0(2))./(a3*z_l+f*r0(3));
@@ -31,37 +31,38 @@ y_cm = f*(a2*z_l+f*r0(2))./(a3*z_l+f*r0(3));
 
 %%
 %Plotting
-x_axis = R*[5;0;0]+r0;
-y_axis = R*[0;5;0]+r0;
-z_axis = R*[0;0;5]+r0;
+x_axis = R*[100;0;0]+r0;
+y_axis = R*[0;100;0]+r0;
+z_axis = R*[0;0;100]+r0;
 
-ray = -10*[a1;a2;a3]+[r0(1);r0(2);r0(3)];
+ray = -1000*[a1;a2;a3]+[r0(1);r0(2);r0(3)];
 
 figure(1)
 subplot(1,3,1)
-plot([0 5],[0 0],'LineWidth',2,'color','b')
+plot([0 100],[0 0],'LineWidth',2,'color','b')
 hold on
-plot([0 0],[0 5],'LineWidth',2,'color','b')
+plot([0 0],[0 100],'LineWidth',2,'color','b')
 plot([r0(1) x_axis(1,1)],[r0(3) x_axis(3,1)],'LineWidth',2,'color','r')
 plot([r0(1) z_axis(1,1)],[r0(3) z_axis(3,1)],'LineWidth',2,'color','r')
 plot([r0(1) ray(1)],[r0(3) ray(3)],'LineWidth',2,'color','g')
 title('Bottom view')
 xlabel('X')
 ylabel('Z')
-axis([-10 10 -15 5])
-
+axis([-250 100  -1000 100])
+plotCamera('Location',[0 0 0],'Orientation',[1 0 0; 0 0 1; 0 -1 0],'Opacity',0,'color','b','size',30);
 
 subplot(1,3,2)
-plot([0 5],[0 0],'LineWidth',2,'color','b')
+plot([0 100],[0 0],'LineWidth',2,'color','b')
 hold on
-plot([0 0],[0 5],'LineWidth',2,'color','b')
+plot([0 0],[0 100],'LineWidth',2,'color','b')
 plot([r0(3) z_axis(3,1)],[r0(2) z_axis(2,1)],'LineWidth',2,'color','r')
 plot([r0(3) y_axis(3,1)],[r0(2) y_axis(2,1)],'LineWidth',2,'color','r')
 plot([r0(3) ray(3)],[r0(2) ray(2)],'LineWidth',2,'color','g')
 title('Side view')
 xlabel('Z')
 ylabel('Y')
-axis([-12 8 -2 18])
+axis([-1000 100 -250 250])
+plotCamera('Location',[0 0 0],'Orientation',[0 0 1; 0 1 0; -1 0 0],'Opacity',0,'color','b','size',30);
 
 % plot3([0 5],[0 0],[0 0],'LineWidth',2,'color','b')
 % hold on
@@ -87,6 +88,7 @@ xlabel('x_c [mm]')
 ylabel('y_c [mm]')
 title('Camera image plane')
 plot(x_lm,y_lm,'x')
+axis([-2.2*10^-3*2304/2 2.2*10^-3*2304/2 -2.2*10^-3*1536/2 2.2*10^-3*1536/2])
 
 
 

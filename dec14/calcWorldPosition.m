@@ -1,4 +1,4 @@
-function [X,Y,Z,xr,yr,xl,yl] = calcWorldPosition(Theta,Phi,xrr,yrr,f,R,r0)
+function [X,Y,Z] = calcWorldPosition(Theta,Phi,xrr,yrr,f,R,r0)
 %CALCWORLDPOSITION Summary of this function goes here
 %   Detailed explanation goes here
 % xr yr xl yl is all in image coordinates in mm. As seen on the image
