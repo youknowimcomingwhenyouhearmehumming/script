@@ -41,8 +41,8 @@ for i = 1:imgW
     end
 end
 
-plot(x_cm,y_cm)
-hold on
+% plot(x_cm,y_cm)
+% hold on
 
 if maxVal<10
             posX = NaN;

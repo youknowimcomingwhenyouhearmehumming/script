@@ -7,8 +7,8 @@ function [R,r0] = extrinsicCalibrationNolimitMoreDots(images,angles,x0,f,baseLin
 Rguess = eye(3);
 r0guess = [-baseLineLength;0;0];
 
-Rguess =[0.984102847214101,0.019926663255275,-0.177816714210680;-0.020986547605442,1.000762382373920,-0.005699166180073;0.176718176479539,0.009637499287744,0.983648387837435];
-r0guess =[-3.499994892708752e+02;-0.174718284034359;0.572094903851522];
+Rguess =[0.998428713288284,0.021576452007944,-0.052604641996046;-0.021885882827788,0.999695339332310,-0.005738177525150;0.052236834952218,0.007175535933858,0.998670148774127];
+r0guess =[-1.999998081262345e+02;-0.104148592458888;-0.258060086069151];
 
 imgH = size(images{1},1);
 imgW = size(images{1},2);
@@ -21,8 +21,8 @@ for i = 1:length(images)
     figure(i)
     imshow(images{i}(:,:,1))
     hold on
-    for j = 1:14%15dots per image
-        [camera_point_x,camera_point_y,laser_point_x,laser_point_y] = findCameraAndLaserPoint(images{i}(:,:,1),angles(i*14-14+j,1),angles(i*14-14+j,2),Rguess,r0guess,f,pix_W,pix_H,imgW,imgH);
+    for j = 1:5%15dots per image
+        [camera_point_x,camera_point_y,laser_point_x,laser_point_y] = findCameraAndLaserPoint(images{i}(:,:,1),angles(i*5-5+j,1),angles(i*5-5+j,2),Rguess,r0guess,f,pix_W,pix_H,imgW,imgH);
         if isnan(camera_point_x)
             %dont use this point
         else

@@ -73,9 +73,9 @@ f = (cameraParams.IntrinsicMatrix(1,1)*pix_W + cameraParams.IntrinsicMatrix(2,2)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 
-theta_start = 71.0653;
-stepsize = 0.09563;
-N_images = 199;
+theta_start = 71.;
+stepsize = -0.5;
+N_images = 100;
 %phi_between_dots = 13.3/19;
 phi_pr_image = [0:phi_between_dots:phi_between_dots*14]-phi_between_dots*7;
 
@@ -89,7 +89,7 @@ for i = 0:N_images-1
     Theta = theta_start+i*stepsize;
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%Get images
     try
-        img_name = ['hånd/img_dec14_' num2str(Theta) '.tif'];
+        img_name = ['img_dec14_' num2str(Theta) '.tif'];
         img_1 = undistortImage(imread(img_name),cameraParams);
     catch
         display('fail')
@@ -184,9 +184,6 @@ xlabel('X')
 ylabel('Y')
 zlabel('Z')
 
-
-
-surf()
 
 
 %Distance between the points
