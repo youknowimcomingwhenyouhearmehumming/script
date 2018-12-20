@@ -64,23 +64,23 @@ plot3(0,0,0,'o');
  hold on;
  grid on;
  
- plot3([0 100],[0 0],[0 0],'linewidth',2);
- plot3([0 0],[0 100],[0 0],'linewidth',2);
- plot3([0 0],[0 0],[0 100],'linewidth',2);
+ plot3([0 100],[0 0],[0 0],'linewidth',2,'color','b');
+ plot3([0 0],[0 100],[0 0],'linewidth',2,'color','b');
+ plot3([0 0],[0 0],[0 100],'linewidth',2,'color','b');
 
 % plot3([0 r11]+r14,[0 r21]+r24,[0 r31]+r34)
 % plot3([0 r12]+r14,[0 r22]+r24,[0 r32]+r34)
 % plot3([0 r13]+r14,[0 r23]+r24,[0 r33]+r34)
 plot3(r0(1,1),r0(2,1),r0(3,1),'x');
-plot3([r0(1) x_axis(1,1)],[r0(2) x_axis(2,1)],[r0(3) x_axis(3,1)],'linewidth',2);
-plot3([r0(1) y_axis(1,1)],[r0(2) y_axis(2,1)],[r0(3) y_axis(3,1)],'linewidth',2);
-plot3([r0(1) z_axis(1,1)],[r0(2) z_axis(2,1)],[r0(3) z_axis(3,1)],'linewidth',2);
+plot3([r0(1) x_axis(1,1)],[r0(2) x_axis(2,1)],[r0(3) x_axis(3,1)],'linewidth',2,'color','r');
+plot3([r0(1) y_axis(1,1)],[r0(2) y_axis(2,1)],[r0(3) y_axis(3,1)],'linewidth',2,'color','r');
+plot3([r0(1) z_axis(1,1)],[r0(2) z_axis(2,1)],[r0(3) z_axis(3,1)],'linewidth',2,'color','r');
 
 xlabel('X');
 ylabel('Y');
 zlabel('Z');
 legend('0','X','Y','Z','0','X','Y','Z');
-
+title('Laser(red) in relation to camera(blue)')
 
 % %Plot camera directions
 % magnifier = 250;

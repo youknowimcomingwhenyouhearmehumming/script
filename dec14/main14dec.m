@@ -77,7 +77,7 @@ theta_start = 71.0653;
 stepsize = 0.09563;
 N_images = 199;
 %phi_between_dots = 13.3/19;
-phi_pr_image = [0:phi_between_dots:phi_between_dots*14]-phi_between_dots*7;
+phi_pr_image = [0:phi_between_dots:phi_between_dots*16]-phi_between_dots*9;
 
 X = zeros(N_images*15,1);
 Y = zeros(N_images*15,1);
@@ -130,6 +130,20 @@ end
 
 figure(11)
 plot3(X,Y,Z,'.')
+xlabel('X')
+ylabel('Y')
+zlabel('Z')
+axis([-500 500 -500 500 -1500 -500])
+grid on
+
+
+zzz = Z;
+zzz(zzz>-600) = -600;
+zzz(zzz<-1300) = -1300;
+
+figure(1)
+pointsize = 10;
+scatter3(X, Y,Z, pointsize, zzz);
 xlabel('X')
 ylabel('Y')
 zlabel('Z')

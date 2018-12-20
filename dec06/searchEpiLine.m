@@ -37,8 +37,8 @@ end
 
 
 
-plot(x_cm,y_cm)
-
+% plot(x_cm,y_cm,'b')
+% hold on
 
 if maxVal<10
             posX = 0;

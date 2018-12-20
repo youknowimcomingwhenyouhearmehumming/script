@@ -94,7 +94,10 @@ X = zeros(47:1)
 Y = zeros(47:1)
 Z = zeros(47:1)
 thetam1 = 0;
-figure(6)
+
+submatrices = [];
+positions = [];
+
 for i = 0:47
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%Get angles
 Theta = b0_theta+i*stepsize;
@@ -107,18 +110,24 @@ catch
     skip = 1;
 end
 if skip ~= 1
+    
+    
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%Find the dot
 searchLineWidtPixels = 20;
 [posX1,posY1] = searchEpiLine(img_1(:,:,1),imgW,imgH,Theta,Phi,R,r0,f,searchLineWidtPixels,pix_W,pix_H);
+plot(posX1,posY1,'x','color','b')
+
+
 if posX1 <= 10 || posY1 <= 10
     break;
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%Cut out the dot
-Wsub = 10;
-Hsub = 10;
+Wsub = 20;
+Hsub = 20;
 [subMatrix1, offsetH1, offsetW1] = subMatrix(img_1(:,:,1),posX1,posY1,Wsub,Hsub);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%Find mid of the dot
 [ymid_1,xmid_1] = midOfMass_gauss(subMatrix1,offsetW1,offsetH1);
@@ -126,6 +135,9 @@ Hsub = 10;
 xmid1_mm = (xmid_1-imgW/2)*pix_W;
 ymid1_mm = (ymid_1-imgH/2)*pix_H;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%Find world coordinate
+
+submatrices = [submatrices {subMatrix1}];
+positions = [positions;xmid_1-offsetW1 ymid_1-offsetH1];
 
 
 [x,y,z,xr,yr,xl,yl] = calcWorldPosition(Theta,Phi,xmid1_mm,ymid1_mm,f,R,r0);
@@ -151,6 +163,18 @@ ylabel('Y')
 zlabel('Z')
 %axis([-500 500 -500 500 -1500 -500])
 grid on
+
+
+
+
+figure(3)
+for i = 1:16
+    subplot(4,4,i)
+    imshow(submatrices{i})
+    hold on
+    plot(positions(i,1),positions(i,2),'x','color','b','LineWidth',2)
+end
+
 
 
 axx1 = R*[10;0;0]
