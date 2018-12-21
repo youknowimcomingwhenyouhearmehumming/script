@@ -20,6 +20,9 @@ load('cameraParams.mat') % We use the cameraParams found ealier, hopefully noone
 imgH = cameraParams.ImageSize(1);
 imgW = cameraParams.ImageSize(2);
 
+
+Theta_err_corr = 0.002;
+
 %addpath('hånd');
 addpath('flade');
 addpath('myg og handske');
@@ -78,8 +81,8 @@ f = (cameraParams.IntrinsicMatrix(1,1)*pix_W + cameraParams.IntrinsicMatrix(2,2)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 
-theta_start = 70.2601;
-stepsize = 0.5;
+theta_start = 90.2601;
+stepsize = -0.5;
 N_images = 199;
 %phi_between_dots = 13.3/19;
 %phi_pr_image = [0:phi_between_dots:phi_between_dots*16]-phi_between_dots*9;
@@ -101,7 +104,9 @@ for i = 0:N_images-1
         skip = 1;
     end
     for j = 1:15
-        Phi = phi_between_dots*j-phi_between_dots*8;
+        Phi = phi_between_dots*j-phi_between_dots*8;        
+        
+        %Theta = Theta + (Theta_err_corr*i)^2;
         
         if skip ~= 1
             %%%%%%%%%%%%%%%%%%%%%%%%%%%Find the dot
@@ -143,16 +148,16 @@ grid on
 
 
 zzz = Z;
-zzz(zzz>-600) = -1000;
-zzz(zzz<-1300) = -1200;
+zzz(zzz>-1000) = -1000;
+zzz(zzz<-1300) = -1300;
 
 figure(1)
 pointsize = 10;
-scatter3(X, Y,Z, pointsize, zzz,'.');
+scatter3(X, Y,Z, pointsize, zzz,'o');
 xlabel('X[mm]')
 ylabel('Y[mm]')
 zlabel('Z[mm]')
-axis([-400 400 -200 200 -1200 -800])
+%axis([-500 500 -200 200 -1400 -1000])
 grid on
 title('Test results with laser fan on wall')
 

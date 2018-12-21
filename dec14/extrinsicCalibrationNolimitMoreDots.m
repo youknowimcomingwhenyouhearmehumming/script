@@ -84,34 +84,34 @@ ylabel('Y');
 zlabel('Z');
 legend('0','X','Y','Z','0','X','Y','Z');
 
-
-%Plot camera directions
-magnifier = 250;
-camX = -camera_points(:,1)*magnifier
-camY = -camera_points(:,2)*magnifier;
-camZ = -ones(5,1)*f*magnifier;
-
-plot3([0 camX(1)],[0 camY(1)],[0 camZ(1)],'color','y')
-plot3([0 camX(2)],[0 camY(2)],[0 camZ(2)],'color','m')
-plot3([0 camX(3)],[0 camY(3)],[0 camZ(3)],'color','c')
-plot3([0 camX(4)],[0 camY(4)],[0 camZ(4)],'color','r')
-plot3([0 camX(5)],[0 camY(5)],[0 camZ(5)],'color','g')
-
-%plot laser directions with rotation
-lasX = -laser_points(:,1)*magnifier;
-lasY = -laser_points(:,2)*magnifier;
-lasZ = -ones(5,1)*f*magnifier;
-
-
-rotLas = R*[lasX';lasY';lasZ']+r0;
-lasX = rotLas(1,:)';
-lasY = rotLas(2,:)';
-lasZ = rotLas(3,:)';
-plot3([r0(1) lasX(1)],[r0(2) lasY(1)],[r0(3) lasZ(1)],'color','y')
-plot3([r0(1) lasX(2)],[r0(2) lasY(2)],[r0(3) lasZ(2)],'color','m')
-plot3([r0(1) lasX(3)],[r0(2) lasY(3)],[r0(3) lasZ(3)],'color','c')
-plot3([r0(1) lasX(4)],[r0(2) lasY(4)],[r0(3) lasZ(4)],'color','r')
-plot3([r0(1) lasX(5)],[r0(2) lasY(5)],[r0(3) lasZ(5)],'color','g')
+% 
+% %Plot camera directions
+% magnifier = 250;
+% camX = -camera_points(:,1)*magnifier
+% camY = -camera_points(:,2)*magnifier;
+% camZ = -ones(5,1)*f*magnifier;
+% 
+% plot3([0 camX(1)],[0 camY(1)],[0 camZ(1)],'color','y')
+% plot3([0 camX(2)],[0 camY(2)],[0 camZ(2)],'color','m')
+% plot3([0 camX(3)],[0 camY(3)],[0 camZ(3)],'color','c')
+% plot3([0 camX(4)],[0 camY(4)],[0 camZ(4)],'color','r')
+% plot3([0 camX(5)],[0 camY(5)],[0 camZ(5)],'color','g')
+% 
+% %plot laser directions with rotation
+% lasX = -laser_points(:,1)*magnifier;
+% lasY = -laser_points(:,2)*magnifier;
+% lasZ = -ones(5,1)*f*magnifier;
+% 
+% 
+% rotLas = R*[lasX';lasY';lasZ']+r0;
+% lasX = rotLas(1,:)';
+% lasY = rotLas(2,:)';
+% lasZ = rotLas(3,:)';
+% plot3([r0(1) lasX(1)],[r0(2) lasY(1)],[r0(3) lasZ(1)],'color','y')
+% plot3([r0(1) lasX(2)],[r0(2) lasY(2)],[r0(3) lasZ(2)],'color','m')
+% plot3([r0(1) lasX(3)],[r0(2) lasY(3)],[r0(3) lasZ(3)],'color','c')
+% plot3([r0(1) lasX(4)],[r0(2) lasY(4)],[r0(3) lasZ(4)],'color','r')
+% plot3([r0(1) lasX(5)],[r0(2) lasY(5)],[r0(3) lasZ(5)],'color','g')
 
 end
 
