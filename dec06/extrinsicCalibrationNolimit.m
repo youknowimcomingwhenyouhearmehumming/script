@@ -12,7 +12,7 @@ N = size(angles,1);
 laser_points = zeros(N,2);
 camera_points = zeros(N,2);
 for i = 1:N
-[posX1,posY1] = searchEpiLine(images{i}(:,:,1),imgW,imgH,angles(1,1),0,Rguess,r0guess,f,searchLineWidtPixels,pix_W,pix_H);
+[posX1,posY1] = searchEpiLine(images{i}(:,:,1),imgW,imgH,angles(i,1),0,Rguess,r0guess,f,searchLineWidtPixels,pix_W,pix_H);
 
 subMatrixW = 10;
 subMatrixH = 10;
@@ -37,7 +37,7 @@ x0 = [x0 x0(end)*ones(1,(N-5)*2)];
 lb = [lb lb(end)*ones(1,(N-5)*2)];
 ub = [ub ub(end)*ones(1,(N-5)*2)];
 
-options = optimoptions(@lsqnonlin,'OptimalityTolerance',10^-10,'StepTolerance',10^-12,'FunctionTolerance',10^-10,'MaxFunctionEvaluations',50000,'MaxIterations',10000);
+options = optimoptions(@lsqnonlin,'OptimalityTolerance',10^-10,'StepTolerance',10^-10,'FunctionTolerance',10^-10,'MaxFunctionEvaluations',5000000,'MaxIterations',10000);
 x0 = lsqnonlin(@(x)objectiveNoLimit(x,laser_points,camera_points,f,baseLineLength),x0',lb',ub',options);
 x = lsqnonlin(@(x)objectiveNoLimit(x,laser_points,camera_points,f,baseLineLength),x0,lb',ub',options);
 

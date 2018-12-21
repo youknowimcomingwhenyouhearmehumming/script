@@ -57,13 +57,15 @@ end
 
 errors(N*3+1) =  (dot([r14;r24;r34],[r14;r24;r34])-baseLineLength^2)^2*orthonormalityWeight;
 
-errors(N*3+2) =  ((r11^2+r12^2+r13^2 - 1))^2*orthonormalityWeight;
-errors(N*3+3) =  ((r21^2+r22^2+r23^2 - 1))^2*orthonormalityWeight;
-errors(N*3+4) =  ((r31^2+r32^2+r33^2 - 1))^2*orthonormalityWeight;
+errors(N*3+2) =  ((r11*r21+r12*r22+r13*r23)*1)^2*orthonormalityWeight;
+errors(N*3+3) =  ((r21*r31+r22*r32+r23*r33)*1)^2*orthonormalityWeight;
+errors(N*3+4) =  ((r11*r31+r12*r32+r13*r33)*1)^2*orthonormalityWeight;
 
-errors(N*3+5) =  ((r11*r21+r12*r22+r13*r23)*1)^2*orthonormalityWeight;
-errors(N*3+6) =  ((r21*r31+r22*r32+r23*r33)*1)^2*orthonormalityWeight;
-errors(N*3+7) =  ((r11*r31+r12*r32+r13*r33)*1)^2*orthonormalityWeight;
+errors(N*3+5) =  ((r11^2+r12^2+r13^2 - 1))^2*orthonormalityWeight;
+errors(N*3+6) =  ((r21^2+r22^2+r23^2 - 1))^2*orthonormalityWeight;
+errors(N*3+7) =  ((r31^2+r32^2+r33^2 - 1))^2*orthonormalityWeight;
+
+
 
 
 errors'

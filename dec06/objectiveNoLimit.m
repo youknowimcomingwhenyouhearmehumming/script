@@ -10,7 +10,7 @@ function errors = objectiveNoLimit(x,laser_points,camera_points,f,baseLineLength
 %
 %x = [r11, r12, r13, r14, r21, r22, r23, r24, r31, r32, r33, r34, zl1,
 %zl2, zl3, zl4, zl5, zr1, zr2, zr3, zr4, zr5]
-orthonormalityWeight = 100;
+orthonormalityWeight = 1000;
 
 x = x';
 r11 = x(1,1);
