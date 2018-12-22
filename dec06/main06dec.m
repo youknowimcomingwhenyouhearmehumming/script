@@ -75,7 +75,7 @@ f = (cameraParams.IntrinsicMatrix(1,1)*pix_W + cameraParams.IntrinsicMatrix(2,2)
 b0_theta = 90.3-theta0_off_test;
 stepsize = -0.5;
 skip = 0;
-for i = 0:30%Go througt exstra 25 of the images and add them to the calibration
+for i = 0:20%Go througt exstra 25 of the images and add them to the calibration
     try
         Theta = b0_theta+i*stepsize;
         img_name = ['3d_straight_object\b' num2str(Theta) '.tif'];
@@ -183,7 +183,7 @@ scatter3(X, Y,Z, pointsize, zzz);
 xlabel('X')
 ylabel('Y')
 zlabel('Z')
-%axis([-400 200 -200 200 -1300 -800])
+axis([-400 200 -200 200 -1300 -800])
 grid on
 title('World position of scan along plane surface')
 
@@ -200,9 +200,14 @@ subplot(1,2,2)
 plot(X,Z,'o')
 xlabel('X')
 ylabel('Z')
-axis([-400 200 -1300 -1000])
+axis([-400 200 -1150 -1000])
 grid on
 title('Top view')
+
+sqrt((X(1)-X(end))^2+(Z(1)-Z(end))^2)
+
+
+
 
 
 a = [ones(length(imgXX),1) imgXX']\imgYY'
