@@ -1,7 +1,7 @@
 function [R,r0] = extrinsicCalibrationNolimit(images,angles,x0,f,baseLineLength,pix_W,pix_H,lb,ub)
-%EXTRINSICCALIBRATION Summary of this function goes here
-%   Detailed explanation goes here
-%baseline length is positive.
+
+%The guess is perfectly aligned so the search with can be set to the entire
+%image
 Rguess = eye(3);
 r0guess = [-baseLineLength;0;0];
 imgH = size(images{1},1);
@@ -11,11 +11,11 @@ searchLineWidtPixels = imgH/2;%passing Phi = 0 and imgW/2 ensures the entire pic
 N = size(angles,1);
 laser_points = zeros(N,2);
 camera_points = zeros(N,2);
-for i = 1:N
+for i = 1:N %find a single dot, cut out O`ROI and find midpoint. Then convert to image coordinates
 [posX1,posY1] = searchEpiLine(images{i}(:,:,1),imgW,imgH,angles(i,1),0,Rguess,r0guess,f,searchLineWidtPixels,pix_W,pix_H);
 
-subMatrixW = 10;
-subMatrixH = 10;
+subMatrixW = 20;
+subMatrixH = 20;
 
 [subMatrix1, offsetH1, offsetW1] = subMatrix(images{i}(:,:,1),posX1,posY1,subMatrixW,subMatrixH);
 
@@ -29,19 +29,18 @@ camera_points(i,2) = (midOfMass_H1-imgH/2)*pix_H;
 
 end
 
-%nonlcon = @UnlConFun;
-%options = optimoptions(@fmincon,'OptimalityTolerance',10^-10,'StepTolerance',10^-12,'FunctionTolerance',10^-10,'MaxFunctionEvaluations',50000,'MaxIterations',10000);
-%x = fmincon(@(x)objectiveFmincon(x,laser_points,camera_points,f,baseLineLength),x0',[],[],[],[],lb',ub',@(x)nonlcon(x,baseLineLength),options);
-
+%copy last constraint so the arrays match the number of images
 x0 = [x0 x0(end)*ones(1,(N-5)*2)];
 lb = [lb lb(end)*ones(1,(N-5)*2)];
 ub = [ub ub(end)*ones(1,(N-5)*2)];
 
+%Set optimizer options and run the minimizer
 options = optimoptions(@lsqnonlin,'OptimalityTolerance',10^-10,'StepTolerance',10^-10,'FunctionTolerance',10^-10,'MaxFunctionEvaluations',5000000,'MaxIterations',10000);
-x0 = lsqnonlin(@(x)objectiveNoLimit(x,laser_points,camera_points,f,baseLineLength),x0',lb',ub',options);
 x = lsqnonlin(@(x)objectiveNoLimit(x,laser_points,camera_points,f,baseLineLength),x0,lb',ub',options);
 
 x
+
+%Define the Rotation and offset
 R = [   x(1) x(2) x(3);
         x(5) x(6) x(7);
         x(9) x(10) x(11)];
@@ -49,7 +48,7 @@ R = [   x(1) x(2) x(3);
 r0 = [x(4); x(8); x(12)];
 
 %PlotStuff
-%%
+%% This section only for plotting
 %making the plot for the offset:
 %R = R*10; %For better plotting
 x_axis = R*[100;0;0]+r0;

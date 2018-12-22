@@ -2,12 +2,6 @@ clear all;
 clc
 close all;
 
-%%% TO DO
-%- Rasmus tage all calibrering ud i selvstændige funktioner
-% -Rasmus i epipolar lines kan man så ikke bestemem width og height inde i
-% funktionen så man ikke ebhøver at fodre den med det, når man kalder
-% funktionen?
-
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%1 - Calibration of camera and laser
 
@@ -20,15 +14,12 @@ load('cameraParams.mat') % We use the cameraParams found ealier, hopefully noone
 imgH = cameraParams.ImageSize(1);
 imgW = cameraParams.ImageSize(2);
 
-
-Theta_err_corr = 0;
-
 %addpath('hånd');
 addpath('flade');
 addpath('myg og handske');
 
 %Read some images with laser dots in different positions
-%Each image have a dot in Phi=0 and then 7 dots over and 7 under = 15 dots
+%Each image have a dot in Phi=0 and then some dots over and some under
 image1 = imread('img_dec14_77.7601.tif');
 image2 = imread('img_dec14_88.2601.tif');
 %image3 = imread('hånd/img_dec14_86.3661.tif');
@@ -39,14 +30,13 @@ image6 = imread('img_dec14_71.2601.tif');
 image7 = imread('img_dec14_73.2601.tif');
 image8 = imread('img_dec14_80.2601.tif');
 
-%Get the angles
+%Get the angles. Only 5 dots per image are used for calibration
 theta = [repmat(77.7601,1,5) repmat(88.2601,1,5) repmat(85.2601,1,5) repmat(74.2601,1,5) repmat(94.2601,1,5) repmat(71.2601,1,5) repmat(73.2601,1,5) repmat(80.2601,1,5)]';
 
-phi_between_dots = atan(60/500)*180/(9*pi);
+phi_between_dots = atan(60/500)*180/(9*pi);%measured angel
 phi_pr_image = [0:phi_between_dots:phi_between_dots*4]-phi_between_dots*2;
 
-Phi_offset = 0;
-phi = [phi_pr_image phi_pr_image phi_pr_image phi_pr_image phi_pr_image phi_pr_image phi_pr_image phi_pr_image]'+Phi_offset;
+phi = [phi_pr_image phi_pr_image phi_pr_image phi_pr_image phi_pr_image phi_pr_image phi_pr_image phi_pr_image]';
 
 baseLineLength = 200;%measured
 
@@ -76,18 +66,19 @@ pix_H = 2.2*10^-3;
 
 f = (cameraParams.IntrinsicMatrix(1,1)*pix_W + cameraParams.IntrinsicMatrix(2,2)*pix_H)/2; %the mean of the calculatet f from y and x magnification
 
+%Run extrinsic calibration with multiple dots per image
 [R,r0] = extrinsicCalibrationNolimitMoreDots(images,angles,x0,f,baseLineLength,pix_W,pix_H,lb,ub,imgW,imgH);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 
+%Define the loop that reads the images named after their theta angel
 theta_start = 90;
 stepsize = -0.09563;
 %stepsize = -0.5;
 N_images = 199;
-%phi_between_dots = 13.3/19;
-%phi_pr_image = [0:phi_between_dots:phi_between_dots*16]-phi_between_dots*9;
 
+%Search 19 dots per image
 X = zeros(N_images*19,1);
 Y = zeros(N_images*19,1);
 Z = zeros(N_images*19,1);
@@ -112,11 +103,9 @@ for i = 0:N_images-1
             searchLineWidtPixels = 10;
             [posX1,posY1] = searchEpiLine(img_1(:,:,1),imgW,imgH,Theta,Phi,R,r0,f,searchLineWidtPixels,pix_W,pix_H);
             if isnan(posX1)
-            
+             %If point is not found skip
             else
-                
-            
-            
+
             %%%%%%%%%%%%%%%%%%%%%%%%%%Cut out the dot
             Wsub = 20;
             Hsub = 20;
@@ -138,7 +127,7 @@ for i = 0:N_images-1
     skip = 0;
 end
 
-
+%% Plotting results
 figure(11)
 plot3(X,Y,Z,'.')
 xlabel('X')

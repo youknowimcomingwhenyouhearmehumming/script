@@ -1,6 +1,7 @@
 function [camera_point_x,camera_point_y,laser_point_x,laser_point_y] = findCameraAndLaserPoint(image,Theta,Phi,R,r0,f,pix_W,pix_H,imgW,imgH)
-%FINDCAMERAPOINT Summary of this function goes here
-%   Detailed explanation goes here
+
+%Help function to search for a point and calculate the image coordinates
+%for both camera and laser
 
 try
 

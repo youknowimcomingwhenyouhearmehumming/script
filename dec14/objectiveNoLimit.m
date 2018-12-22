@@ -1,9 +1,5 @@
 function errors = objectiveNoLimit(x,laser_points,camera_points,f,baseLineLength)
-%OBJECTIVE Summary of this function goes here
-%   Detailed explanation goes here
-%
-%laser and image points are 5x2 matrix with [xi,yi] in each row.
-%
+
 %laser and camerapoints are where the dot would be seen on the image sensor
 %f away from the pinhole. therefor if realworld X is positive to camera the
 %camera point x would be negative.
@@ -66,8 +62,6 @@ errors(N*3+6) =  ((r21^2+r22^2+r23^2 - 1))^2*orthonormalityWeight;
 errors(N*3+7) =  ((r31^2+r32^2+r33^2 - 1))^2*orthonormalityWeight;
 
 
-
-
-errors'
+errors';
 end
 

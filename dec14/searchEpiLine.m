@@ -1,13 +1,5 @@
 function [posX,posY] = searchEpiLine(imageData,imgW,imgH,Theta,Phi,R,r0,f,searchLineWidtPixels,pix_W,pix_H)
-%SEARCHEPILINE Summary of this function goes here
-%   Detailed explanation goes here
 %searchLineWidhtPixels are applied over and under the line
-
-% Theta=-(Theta)*pi/180;
-% Phi=(Phi+90)*pi/180;
-
-% x_lm = f/tan(Theta);
-% y_lm = f/tan(Phi);
 
 x_lm = tan((Theta-90)*pi/180)*f;
 y_lm = -tan(Phi*pi/180)*f;
@@ -17,7 +9,6 @@ a2 = R(2,1)*x_lm + R(2,2)*y_lm+R(2,3)*f;
 a3 = R(3,1)*x_lm + R(3,2)*y_lm+R(3,3)*f;
 
 %Define which pixels to look at
-
 z_l = zeros(imgW,1);%we use imgW since all the variation is in this direction unless laser position is completely fucked up
 for i = 1:imgW
     z_l(i) = -f*(f*r0(1)-r0(3)*(pix_W*(i-imgW/2)))/(a1*f-a3*(pix_W*(i-imgW/2)));
@@ -44,10 +35,9 @@ end
 % plot(x_cm,y_cm)
 % hold on
 
-if maxVal<10
+if maxVal<10 %To specifie a value where we regard it as not a point
             posX = NaN;
             posY = NaN;
 end
-
 end
 

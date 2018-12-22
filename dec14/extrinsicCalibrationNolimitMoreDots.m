@@ -1,11 +1,8 @@
 function [R,r0] = extrinsicCalibrationNolimitMoreDots(images,angles,x0,f,baseLineLength,pix_W,pix_H,lb,ub,imgW,imgH)
-%EXTRINSICCALIBRATION Summary of this function goes here
-%   Detailed explanation goes here
-%baseline length is positive.
 
-
-Rguess = eye(3);
-r0guess = [-baseLineLength;0;0];
+%it is assumed that the laser is to the left of the camera
+%the guess values are needed because we wish to find more dots per image
+%which cannot be done without an extrinsic calibration
 
 Rguess =[0.998428713288284,0.021576452007944,-0.052604641996046;-0.021885882827788,0.999695339332310,-0.005738177525150;0.052236834952218,0.007175535933858,0.998670148774127];
 r0guess =[-1.999998081262345e+02;-0.104148592458888;-0.258060086069151];
@@ -17,6 +14,7 @@ N = 0;
 laser_points = [];
 camera_points = [];
 
+%loop to find each dot in each image
 for i = 1:length(images)
     figure(i)
     imshow(images{i}(:,:,1))
@@ -33,26 +31,24 @@ for i = 1:length(images)
     end
 end
 
-%nonlcon = @UnlConFun;
-%options = optimoptions(@fmincon,'OptimalityTolerance',10^-10,'StepTolerance',10^-12,'FunctionTolerance',10^-10,'MaxFunctionEvaluations',50000,'MaxIterations',10000);
-%x = fmincon(@(x)objectiveFmincon(x,laser_points,camera_points,f,baseLineLength),x0',[],[],[],[],lb',ub',@(x)nonlcon(x,baseLineLength),options);
-
+%Extend to include all point added
 x0 = [x0 x0(end)*ones(1,(N-5)*2)];
 lb = [lb lb(end)*ones(1,(N-5)*2)];
 ub = [ub ub(end)*ones(1,(N-5)*2)];
 
+%minimizer options and run minimizer
 options = optimoptions(@lsqnonlin,'OptimalityTolerance',10^-8,'StepTolerance',10^-8,'FunctionTolerance',10^-8,'MaxFunctionEvaluations',50000,'MaxIterations',10000);
 x = lsqnonlin(@(x)objectiveNoLimit(x,laser_points,camera_points,f,baseLineLength),x0',lb',ub',options);
 
-x
+%define rotation and offset
 R = [   x(1) x(2) x(3);
         x(5) x(6) x(7);
         x(9) x(10) x(11)];
     
 r0 = [x(4); x(8); x(12)];
 
-%PlotStuff
-%%
+
+%% Plotting
 %making the plot for the offset:
 %R = R*10; %For better plotting
 x_axis = R*[100;0;0]+r0;
