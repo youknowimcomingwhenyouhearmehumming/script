@@ -149,18 +149,18 @@ grid on
 
 
 zzz = Z;
-zzz(zzz>-1000) = -1000;
-zzz(zzz<-1300) = -1300;
+zzz(zzz>-800) = -800;
+zzz(zzz<-1100) = -1100;
 
 figure(1)
-pointsize = 10;
-scatter3(X, Y,Z, pointsize, zzz,'o');
+pointsize = 30;
+scatter3(X, Y,Z, pointsize, zzz,'.','lineWidth',4);
 xlabel('X[mm]')
 ylabel('Y[mm]')
 zlabel('Z[mm]')
-axis([-500 500 -200 200 -1400 -1000])
+axis([-300 300 -200 200 -1100 -800])
 grid on
-title('Test results with laser fan on wall')
+title('Test results with laser fan on wall with objects')
 
 %
 % axx1 = R*[10;0;0]
